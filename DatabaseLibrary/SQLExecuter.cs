@@ -14,8 +14,6 @@ namespace DatabaseLibrary
         public SQLExecuter(string connectionString)
         {
             connection = new OleDbConnection(connectionString);
-            if (!connection.State.Equals(ConnectionState.Open))
-                connection.Open();
         }
         public void Dispose()
         {

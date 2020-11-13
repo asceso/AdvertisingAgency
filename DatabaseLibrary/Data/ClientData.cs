@@ -21,7 +21,7 @@ namespace DatabaseLibrary.Data
                 LastName = reader.GetString(3),
                 ContactNumber = reader.GetString(4),
                 OrdersCount = reader.GetInt32(5),
-                AddtionalInfo = AddditionaClientlInfoes.GetDataByGuid(reader.GetGuid(6)).Result
+                AddtionalInfo = AddditionaClientlInfoes.GetDataByGuid(reader.GetGuid(6))
             };
         }
     }

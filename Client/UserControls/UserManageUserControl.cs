@@ -29,7 +29,7 @@ namespace Client.UserControls
         private void UserManageUserControl_Load(object sender, EventArgs e)
         {
             using (PositionData data = new PositionData(connectionString))
-                positions = data.GetDataCollection().Result;
+                positions = data.GetDataCollection();
 
             comboBox1.Items.Clear();
             foreach (PositionModel position in positions)

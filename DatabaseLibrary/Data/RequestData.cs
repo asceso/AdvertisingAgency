@@ -24,9 +24,9 @@ namespace DatabaseLibrary.Data
                 Name = reader.GetString(1),
                 Number = reader.GetString(2),
                 Address = reader.GetString(3),
-                Service = Services.GetDataByGuid(reader.GetGuid(4)).Result,
-                User = Users.GetDataByGuid(reader.GetGuid(5)).Result,
-                Client = Clients.GetDataByGuid(reader.GetGuid(6)).Result,
+                Service = Services.GetDataByGuid(reader.GetGuid(4)),
+                User = Users.GetDataByGuid(reader.GetGuid(5)),
+                Client = Clients.GetDataByGuid(reader.GetGuid(6)),
                 Status = reader.GetBoolean(7)
             };
         }

@@ -20,7 +20,7 @@ namespace DatabaseLibrary.Data
                 FirstName = reader.GetString(1),
                 MiddleName = reader.GetString(2),
                 LastName = reader.GetString(3),
-                Position = Positions.GetDataByGuid(reader.GetGuid(4)).Result,
+                Position = Positions.GetDataByGuid(reader.GetGuid(4)),
                 ContactNumber = reader.GetString(5),
             };
         }

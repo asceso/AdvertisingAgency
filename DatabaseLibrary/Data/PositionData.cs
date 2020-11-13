@@ -20,13 +20,13 @@ namespace DatabaseLibrary.Data
             };
         }
 
-        //[Obsolete(blockedMethod, true)]
-        //public override int InsertData(PositionModel model, string procedureName) => base.InsertData(model, procedureName);
+        [Obsolete(blockedMethod, true)]
+        public override int InsertData(PositionModel model, string procedureName) => base.InsertData(model, procedureName);
 
-        //[Obsolete(blockedMethod, true)]
-        //public override int UpdateData(PositionModel model, string procedureName) => base.UpdateData(model, procedureName);
+        [Obsolete(blockedMethod, true)]
+        public override int UpdateData(PositionModel model, string procedureName) => base.UpdateData(model, procedureName);
 
-        //[Obsolete(blockedMethod, true)]
-        //public override int DeleteDataByGuid(Guid ID) => base.DeleteDataByGuid(ID);
+        [Obsolete(blockedMethod, true)]
+        public override int DeleteDataByGuid(Guid ID) => base.DeleteDataByGuid(ID);
     }
 }

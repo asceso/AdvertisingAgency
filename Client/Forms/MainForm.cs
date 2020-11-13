@@ -31,7 +31,7 @@ namespace Client.Forms
         internal void UpdateUsersList(int selected = -1)
         {
             using (UserData data = new UserData(settings.ConnectionString))
-                UsersCollection = data.GetDataCollection().Result;
+                UsersCollection = data.GetDataCollection();
 
             UsersList.Items.Clear();
             foreach (var user in UsersCollection)
@@ -67,51 +67,54 @@ namespace Client.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<UserModel> models;
-            using (UserData data = new UserData(settings.ConnectionString))
+            for (int i = 0; i < 5000; i++)
             {
-
-                List<UserModel> dataCollection = data.GetDataCollection().Result;
-
-                Guid tempGuid = Guid.NewGuid();
-                Guid positionGuid = Guid.NewGuid();
-
-                PositionModel position;
-
-                using (PositionData positionData = new PositionData(settings.ConnectionString))
+                List<UserModel> models;
+                using (UserData data = new UserData(settings.ConnectionString))
                 {
-                    positionData.InsertData(
-                        new PositionModel()
-                        {
-                            ID = positionGuid,
-                            Name = "Test",
-                            Description = "Test"
-                        },
-                        nameof(SQLEnums.StoredProcedureNames.ДолжностиДобавить));
 
-                    position = positionData.GetDataByGuid(positionGuid).Result;
-                }
+                    List<UserModel> dataCollection = data.GetDataCollection();
 
-                data.InsertData(
-                    new UserModel()
+                    Guid tempGuid = Guid.NewGuid();
+                    Guid positionGuid = Guid.NewGuid();
+
+                    PositionModel position;
+
+                    using (PositionData positionData = new PositionData(settings.ConnectionString))
                     {
-                        ID = tempGuid,
-                        FirstName = "Test",
-                        MiddleName = "Test",
-                        LastName = "Test",
-                        ContactNumber = "88005553535",
-                        Position = position
-                    },
-                    nameof(SQLEnums.StoredProcedureNames.СотрудникиДобавить));
+                        positionData.InsertData(
+                            new PositionModel()
+                            {
+                                ID = positionGuid,
+                                Name = "Test",
+                                Description = "Test"
+                            },
+                            nameof(SQLEnums.StoredProcedureNames.ДолжностиДобавить));
 
-                models = data.GetDataCollection().Result;
+                        position = positionData.GetDataByGuid(positionGuid);
+                    }
 
-                UserModel someModel = data.GetDataByGuid(tempGuid).Result;
-                data.UpdateData(someModel, nameof(SQLEnums.StoredProcedureNames.СотрудникиИзменить));
+                    data.InsertData(
+                        new UserModel()
+                        {
+                            ID = tempGuid,
+                            FirstName = "Test",
+                            MiddleName = "Test",
+                            LastName = "Test",
+                            ContactNumber = "88005553535",
+                            Position = position
+                        },
+                        nameof(SQLEnums.StoredProcedureNames.СотрудникиДобавить));
 
-                data.DeleteDataByGuid(tempGuid);
+                    models = data.GetDataCollection();
 
-                models = data.GetDataCollection().Result;
+                    UserModel someModel = data.GetDataByGuid(tempGuid);
+                    data.UpdateData(someModel, nameof(SQLEnums.StoredProcedureNames.СотрудникиИзменить));
+
+                    data.DeleteDataByGuid(tempGuid);
+
+                    models = data.GetDataCollection();
+                }
             }
         }
     }
