@@ -1,5 +1,5 @@
 ﻿using DatabaseLibrary.Models;
-using System.Data.OleDb;
+using System.Data.Common;
 
 namespace DatabaseLibrary.Data
 {
@@ -16,14 +16,14 @@ namespace DatabaseLibrary.Data
             Clients = new ClientData(connectionString);
         }
 
-        internal override RequestModel MapModel(OleDbDataReader reader)
+        internal override RequestModel MapModel(DbDataReader reader)
         {
             return new RequestModel()
             {
                 ID = reader.GetGuid(0),
-                Name = reader.GetString(1),
-                Number = reader.GetString(2),
-                Address = reader.GetString(3),
+                Name = reader.GetValue(1).ToString(),
+                Number = reader.GetValue(2).ToString(),
+                Address = reader.GetValue(3).ToString(),
                 Service = Services.GetDataByGuid(reader.GetGuid(4)),
                 User = Users.GetDataByGuid(reader.GetGuid(5)),
                 Client = Clients.GetDataByGuid(reader.GetGuid(6)),

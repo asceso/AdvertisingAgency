@@ -1,5 +1,5 @@
 ﻿using DatabaseLibrary.Models;
-using System.Data.OleDb;
+using System.Data.Common;
 
 namespace DatabaseLibrary.Data
 {
@@ -9,13 +9,13 @@ namespace DatabaseLibrary.Data
         {
         }
 
-        internal override RequestTypeModel MapModel(OleDbDataReader reader)
+        internal override RequestTypeModel MapModel(DbDataReader reader)
         {
             return new RequestTypeModel()
             {
                 ID = reader.GetGuid(0),
-                Name = reader.GetString(1),
-                Description = reader.GetString(2)
+                Name = reader.GetValue(1).ToString(),
+                Description = reader.GetValue(2).ToString()
             };
         }
     }

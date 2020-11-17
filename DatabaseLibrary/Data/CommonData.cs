@@ -61,7 +61,7 @@ namespace DatabaseLibrary.Data
 
         #region Virtual methods
 
-        internal virtual DataType MapModel(OleDbDataReader reader)
+        internal virtual DataType MapModel(DbDataReader reader)
         { return new DataType(); }
 
         public virtual int DeleteDataByGuid(Guid ID)
@@ -119,7 +119,7 @@ namespace DatabaseLibrary.Data
         {
             List<DataType> result = new List<DataType>();
             while (await reader.ReadAsync())
-                result.Add(MapModelAsync(reader));
+                result.Add(MapModel(reader));
             return result;
         }
 
@@ -143,7 +143,7 @@ namespace DatabaseLibrary.Data
             command.Parameters.AddWithValue("@ID", ID);
             DbDataReader asyncReader = await command.ExecuteReaderAsync();
             await asyncReader.ReadAsync();
-            var result = MapModelAsync(asyncReader);
+            var result = MapModel(asyncReader);
             asyncReader.Close();
             connection.Close();
             return result;
@@ -152,9 +152,6 @@ namespace DatabaseLibrary.Data
         #endregion
 
         #region Virtual methods
-
-        internal virtual DataType MapModelAsync(DbDataReader reader)
-        { return new DataType(); }
 
         public async virtual Task<int> DeleteDataByGuidAsync(Guid ID)
         {

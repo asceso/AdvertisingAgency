@@ -1,27 +1,31 @@
 ﻿using DatabaseLibrary.Models;
-using System;
-using System.Data.OleDb;
+using System.Data.Common;
 
 namespace DatabaseLibrary.Data
 {
     public class UserData : CommonData<UserModel>
     {
         private readonly PositionData Positions;
+        private readonly RoleData Roles;
         public UserData(string connectionString) : base(connectionString, "Сотрудники")
         {
             Positions = new PositionData(connectionString);
+            Roles = new RoleData(connectionString);
         }
 
-        internal override UserModel MapModel(OleDbDataReader reader)
+        internal override UserModel MapModel(DbDataReader reader)
         {
             return new UserModel()
             {
                 ID = reader.GetGuid(0),
-                FirstName = reader.GetString(1),
-                MiddleName = reader.GetString(2),
-                LastName = reader.GetString(3),
+                FirstName = reader.GetValue(1).ToString(),
+                MiddleName = reader.GetValue(2).ToString(),
+                LastName = reader.GetValue(3).ToString(),
                 Position = Positions.GetDataByGuid(reader.GetGuid(4)),
-                ContactNumber = reader.GetString(5),
+                ContactNumber = reader.GetValue(5).ToString(),
+                Login = reader.GetValue(6).ToString(),
+                Password = reader.GetValue(7).ToString(),
+                Role = Roles.GetDataByGuid(reader.GetGuid(8))
             };
         }
     }

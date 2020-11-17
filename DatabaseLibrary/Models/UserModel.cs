@@ -16,7 +16,7 @@ namespace DatabaseLibrary.Models
 
         #region overrides
 
-        [DataProperty(0, 5)]
+        [DataProperty(0, 8)]
         public override Guid ID { get => base.ID; set => base.ID = value; }
 
         #endregion
@@ -38,12 +38,23 @@ namespace DatabaseLibrary.Models
         [DataProperty(5, 4)]
         public string ContactNumber { get; set; }
 
+        [DataProperty(6, 5)]
+        public string Login { get; set; }
+
+        [DataProperty(7, 6)]
+        public string Password { get; set; }
+
+        [DataProperty(7, 6)]
+        public RoleModel Role { get; set; }
+
         #endregion data props
 
         #region other
 
         [OtherProperty("Свойство возвращает ФИО сотрудника")]
         public string GetFullName { get => $"{FirstName} {MiddleName} {LastName}"; }
+
+        public bool IsInRole(string RoleName) => Role.Name.Equals(RoleName);
 
         #endregion other
 
@@ -53,6 +64,8 @@ namespace DatabaseLibrary.Models
             MiddleName = string.Empty;
             LastName = string.Empty;
             ContactNumber = string.Empty;
+            Login = "NewLogin";
+            Password = "password";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DatabaseLibrary.Models;
-using System.Data.OleDb;
+using System;
+using System.Data.Common;
 
 namespace DatabaseLibrary.Data
 {
@@ -11,18 +12,20 @@ namespace DatabaseLibrary.Data
             AddditionaClientlInfoes = new AddditionalClientInfoData(connectionString);
         }
 
-        internal override ClientModel MapModel(OleDbDataReader reader)
+        internal override ClientModel MapModel(DbDataReader reader)
         {
-            return new ClientModel()
+            ClientModel model = new ClientModel()
             {
                 ID = reader.GetGuid(0),
-                FirstName = reader.GetString(1),
-                MiddleName = reader.GetString(2),
-                LastName = reader.GetString(3),
-                ContactNumber = reader.GetString(4),
-                OrdersCount = reader.GetInt32(5),
-                AddtionalInfo = AddditionaClientlInfoes.GetDataByGuid(reader.GetGuid(6))
+                FirstName = reader.GetValue(1).ToString(),
+                MiddleName = reader.GetValue(2).ToString(),
+                LastName = reader.GetValue(3).ToString(),
+                ContactNumber = reader.GetValue(4).ToString(),
+                OrdersCount = reader.GetInt32(5)
             };
+            if (!reader.GetValue(6).Equals(DBNull.Value))
+                model.AddtionalInfo = AddditionaClientlInfoes.GetDataByGuid(reader.GetGuid(6));
+            return model;
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Infrastructure.Methods
 {
     public static class SettingsMethods
     {
-        public static SettingsModel ReadConfig()
+        public static SettingsModel ReadConfig(string Path)
         {
             string buffer = string.Empty;
-            using (StreamReader reader = new StreamReader(Environment.CurrentDirectory + "\\AppSettings.json"))
+            using (StreamReader reader = new StreamReader(Path))
             {
                 buffer = reader.ReadToEnd();
             }

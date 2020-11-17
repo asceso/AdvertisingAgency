@@ -1,6 +1,5 @@
 ﻿using DatabaseLibrary.Models;
-using System.Data.OleDb;
-using System.Linq.Expressions;
+using System.Data.Common;
 
 namespace DatabaseLibrary.Data
 {
@@ -10,14 +9,14 @@ namespace DatabaseLibrary.Data
         {
         }
 
-        internal override AddditionalClientInfoModel MapModel(OleDbDataReader reader)
+        internal override AddditionalClientInfoModel MapModel(DbDataReader reader)
         {
             return new AddditionalClientInfoModel()
             {
                 ID = reader.GetGuid(0),
-                Address = reader.GetString(1),
-                AdditionalContactNumber = reader.GetString(2),
-                Preferences = reader.GetString(3)
+                Address = reader.GetValue(1).ToString(),
+                AdditionalContactNumber = reader.GetValue(2).ToString(),
+                Preferences = reader.GetValue(3).ToString()
             };
         }
     }

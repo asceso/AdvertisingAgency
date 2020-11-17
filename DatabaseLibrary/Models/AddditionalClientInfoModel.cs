@@ -4,6 +4,8 @@ namespace DatabaseLibrary.Models
 {
     public class AddditionalClientInfoModel : DataModel
     {
+        public override bool IsIgnorable { get => base.IsIgnorable; set => base.IsIgnorable = value; }
+
         #region not used
 
         [Obsolete(NotUsedProperty, true)]
@@ -39,6 +41,10 @@ namespace DatabaseLibrary.Models
             Address = string.Empty;
             AdditionalContactNumber = string.Empty;
             Preferences = string.Empty;
+        }
+        public AddditionalClientInfoModel(bool IsIgnorable = false) : base()
+        {
+            this.IsIgnorable = IsIgnorable;
         }
     }
 }

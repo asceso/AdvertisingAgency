@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Enums\SQLEnums.cs" />
     <Compile Include="Methods\MessageBoxImplementation.cs" />
+    <Compile Include="Models\ConstValues.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Methods\SettingsMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

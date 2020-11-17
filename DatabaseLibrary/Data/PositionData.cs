@@ -1,6 +1,6 @@
 ﻿using DatabaseLibrary.Models;
 using System;
-using System.Data.OleDb;
+using System.Data.Common;
 
 namespace DatabaseLibrary.Data
 {
@@ -10,13 +10,13 @@ namespace DatabaseLibrary.Data
         {
         }
 
-        internal override PositionModel MapModel(OleDbDataReader reader)
+        internal override PositionModel MapModel(DbDataReader reader)
         {
             return new PositionModel()
             {
                 ID = reader.GetGuid(0),
-                Name = reader.GetString(1),
-                Description = reader.GetString(2),
+                Name = reader.GetValue(1).ToString(),
+                Description = reader.GetValue(2).ToString(),
             };
         }
 

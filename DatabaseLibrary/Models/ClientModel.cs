@@ -2,7 +2,7 @@
 
 namespace DatabaseLibrary.Models
 {
-    public class ClientModel : DataModel
+    public class ClientModel : DataModel, ICloneable
     {
         #region not used
 
@@ -57,6 +57,11 @@ namespace DatabaseLibrary.Models
             LastName = string.Empty;
             ContactNumber = string.Empty;
             OrdersCount = 0;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

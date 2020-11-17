@@ -5,6 +5,7 @@ namespace DatabaseLibrary
     public class DataModel
     {
         internal const string NotUsedProperty = "Свойство не используется";
+        public virtual bool IsIgnorable { get; set; }
 
         [DataProperty(0, 2)]
         public virtual Guid ID { get; set; }

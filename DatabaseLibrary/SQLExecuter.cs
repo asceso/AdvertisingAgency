@@ -72,17 +72,35 @@ namespace DatabaseLibrary
                     return string.Empty;
             }
         }
+
         internal OleDbCommand CreateStoreProcedureCommand(string ProcedureName, Dictionary<string, object> parameters = null)
         {
             OleDbCommand command = connection.CreateCommand();
             command.CommandText = $"[{ProcedureName}]";
             command.CommandType = CommandType.StoredProcedure;
             foreach (var parameter in parameters)
+            {
+                if (parameter.Value is DataModel)
+                    if ((parameter.Value as DataModel).IsIgnorable)
+                        continue;
                 command.Parameters.AddWithValue(
                     $"@{parameter.Key}",
-                    parameter.Value is DataModel ? (parameter.Value as DataModel).ID : parameter.Value
+                    parameter.Value is DataModel ?
+                    (parameter.Value as DataModel).ID : parameter.Value ?? string.Empty
                     );
+            }
             return command;
+        }
+
+        public int ExecuteStoreProcedureWithoutParameters(string ProcedureName)
+        {
+            connection.Open();
+            OleDbCommand command = connection.CreateCommand();
+            command.CommandText = $"[{ProcedureName}]";
+            command.CommandType = CommandType.StoredProcedure;
+            int result = command.ExecuteNonQuery();
+            connection.Close();
+            return result;
         }
     }
 }

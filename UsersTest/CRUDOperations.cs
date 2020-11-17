@@ -17,7 +17,7 @@ namespace UsersTest
 
         public CRUDOperations()
         {
-            settings = SettingsMethods.ReadConfig();
+            settings = SettingsMethods.ReadConfig(Environment.CurrentDirectory + "\\AppSettings.json");
         }
 
         [TestMethod("Base CRUD operation sync methods")]
