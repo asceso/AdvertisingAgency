@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace DatabaseLibrary.Models
 {
@@ -24,9 +25,11 @@ namespace DatabaseLibrary.Models
         #region data props
 
         [DataProperty(1, 0)]
+        [Description("Клиент")]
         public ClientModel Client { get; set; }
 
         [DataProperty(2, 1)]
+        [Description("Причина удаления в архив")]
         public string Reason { get; set; }
 
         #endregion data props

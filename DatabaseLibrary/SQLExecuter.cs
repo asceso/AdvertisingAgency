@@ -1,8 +1,8 @@
-﻿using Infrastructure.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using Infrastructure.Enums;
 
 namespace DatabaseLibrary
 {
@@ -11,10 +11,7 @@ namespace DatabaseLibrary
         #region ctor
 
         public OleDbConnection connection;
-        public SQLExecuter(string connectionString)
-        {
-            connection = new OleDbConnection(connectionString);
-        }
+        public SQLExecuter(string connectionString) => connection = new OleDbConnection(connectionString);
         public void Dispose()
         {
             if (!connection.State.Equals(ConnectionState.Closed))
@@ -43,7 +40,7 @@ namespace DatabaseLibrary
         }
         #endregion data reader
         #region store procedure
-        [Obsolete("",true)]
+        [Obsolete("", true)]
         public List<object> ExecuteStoreProcedure(string ProcedureName)
         {
             OleDbCommand command = CreateStoreProcedureCommand(ProcedureName);
@@ -60,17 +57,13 @@ namespace DatabaseLibrary
 
         internal string CreateSqlQuery(SQLEnums.QueryTypes type, string table)
         {
-            switch (type)
+            return type switch
             {
-                case SQLEnums.QueryTypes.SELECT:
-                    return $"SELECT * FROM [{table}];";
-                case SQLEnums.QueryTypes.SELECT_WHERE:
-                    return $"SELECT * FROM [{table}] WHERE [{table}].[Код] = @ID;";
-                case SQLEnums.QueryTypes.DELETE:
-                    return $"DELETE * FROM [{table}] WHERE [{table}].[Код] = @ID;";
-                default:
-                    return string.Empty;
-            }
+                SQLEnums.QueryTypes.SELECT => $"SELECT * FROM [{table}];",
+                SQLEnums.QueryTypes.SELECT_WHERE => $"SELECT * FROM [{table}] WHERE [{table}].[Код] = @ID;",
+                SQLEnums.QueryTypes.DELETE => $"DELETE * FROM [{table}] WHERE [{table}].[Код] = @ID;",
+                _ => string.Empty,
+            };
         }
 
         internal OleDbCommand CreateStoreProcedureCommand(string ProcedureName, Dictionary<string, object> parameters = null)
@@ -86,7 +79,25 @@ namespace DatabaseLibrary
                 command.Parameters.AddWithValue(
                     $"@{parameter.Key}",
                     parameter.Value is DataModel ?
-                    (parameter.Value as DataModel).ID : parameter.Value ?? string.Empty
+                    (parameter.Value as DataModel).ID : parameter.Value ?? DBNull.Value
+                    );
+            }
+            return command;
+        }
+
+        internal OleDbCommand CreateSqlCommandWithParameters(Dictionary<string, object> parameters = null)
+        {
+            OleDbCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Value is DataModel)
+                    if ((parameter.Value as DataModel).IsIgnorable)
+                        continue;
+                command.Parameters.AddWithValue(
+                    $"@{parameter.Key}",
+                    parameter.Value is DataModel ?
+                    (parameter.Value as DataModel).ID : parameter.Value ?? DBNull.Value
                     );
             }
             return command;

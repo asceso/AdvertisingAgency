@@ -1,5 +1,5 @@
-﻿using DatabaseLibrary.Models;
-using System.Data.Common;
+﻿using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
@@ -7,9 +7,10 @@ namespace DatabaseLibrary.Data
     {
         private readonly ClientData Clients;
         public ArchiveData(string connectionString) : base(connectionString, "Архив клиентов")
-        {
-            Clients = new ClientData(connectionString);
-        }
+            => Clients = new ClientData(connectionString);
+        public ArchiveData() : base(ConnectionString, "Архив клиентов")
+            => Clients = new ClientData(ConnectionString);
+
         internal override ArchiveModel MapModel(DbDataReader reader)
         {
             return new ArchiveModel()

@@ -1,5 +1,5 @@
-﻿using DatabaseLibrary.Models;
-using System.Data.Common;
+﻿using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
@@ -14,6 +14,13 @@ namespace DatabaseLibrary.Data
             Services = new ServiceData(connectionString);
             Users = new UserData(connectionString);
             Clients = new ClientData(connectionString);
+        }
+
+        public RequestData() : base(ConnectionString, "Заявки")
+        {
+            Services = new ServiceData(ConnectionString);
+            Users = new UserData(ConnectionString);
+            Clients = new ClientData(ConnectionString);
         }
 
         internal override RequestModel MapModel(DbDataReader reader)

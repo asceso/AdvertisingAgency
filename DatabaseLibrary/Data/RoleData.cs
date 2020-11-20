@@ -1,15 +1,17 @@
-﻿using DatabaseLibrary.Models;
-using System;
+﻿using System;
 using System.Data.Common;
 using System.Threading.Tasks;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
     public class RoleData : CommonData<RoleModel>
     {
         public RoleData(string connectionString) : base(connectionString, "Роли")
-        {
-        }
+        { }
+
+        public RoleData() : base(ConnectionString, "Роли")
+        { }
 
         internal override RoleModel MapModel(DbDataReader reader)
         {
@@ -31,12 +33,12 @@ namespace DatabaseLibrary.Data
         public override int DeleteDataByGuid(Guid ID) => base.DeleteDataByGuid(ID);
 
         [Obsolete(blockedMethod, true)]
-        public async override Task<int> InsertDataAsync(RoleModel model, string procedureName) => await base.InsertDataAsync(model, procedureName);
+        public override async Task<int> InsertDataAsync(RoleModel model, string procedureName) => await base.InsertDataAsync(model, procedureName);
 
         [Obsolete(blockedMethod, true)]
-        public async override Task<int> UpdateDataAsync(RoleModel model, string procedureName) => await base.UpdateDataAsync(model, procedureName);
+        public override async Task<int> UpdateDataAsync(RoleModel model, string procedureName) => await base.UpdateDataAsync(model, procedureName);
 
         [Obsolete(blockedMethod, true)]
-        public async override Task<int> DeleteDataByGuidAsync(Guid ID) => await base.DeleteDataByGuidAsync(ID);
+        public override async Task<int> DeleteDataByGuidAsync(Guid ID) => await base.DeleteDataByGuidAsync(ID);
     }
 }

@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControls\DictionaryExtension.cs" />
     <Compile Include="Forms\AuthForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +87,30 @@
     <Compile Include="UserControls\ClientsManageUserControl.Designer.cs">
       <DependentUpon>ClientsManageUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\GenericControls\GenericEditModelUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GenericControls\GenericEditModelUserControl.Designer.cs">
+      <DependentUpon>GenericEditModelUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GenericControls\GenericModelUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GenericControls\GenericModelUserControl.Designer.cs">
+      <DependentUpon>GenericModelUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RequestTypes\EditRequestTypeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RequestTypes\EditRequestTypeUserControl.Designer.cs">
+      <DependentUpon>EditRequestTypeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RequestTypes\RequestTypeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RequestTypes\RequestTypeUserControl.Designer.cs">
+      <DependentUpon>RequestTypeUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserManageUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -116,6 +141,18 @@
     </Compile>
     <EmbeddedResource Include="UserControls\ClientsManageUserControl.resx">
       <DependentUpon>ClientsManageUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GenericControls\GenericEditModelUserControl.resx">
+      <DependentUpon>GenericEditModelUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GenericControls\GenericModelUserControl.resx">
+      <DependentUpon>GenericModelUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RequestTypes\EditRequestTypeUserControl.resx">
+      <DependentUpon>EditRequestTypeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RequestTypes\RequestTypeUserControl.resx">
+      <DependentUpon>RequestTypeUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserManageUserControl.resx">
       <DependentUpon>UserManageUserControl.cs</DependentUpon>
@@ -148,6 +185,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\decline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

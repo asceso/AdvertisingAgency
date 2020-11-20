@@ -34,7 +34,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.PasswordBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.authButton = new System.Windows.Forms.Button();
+            this.AuthorizeButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +56,6 @@
             this.LoginBox.Name = "LoginBox";
             this.LoginBox.Size = new System.Drawing.Size(179, 20);
             this.LoginBox.TabIndex = 1;
-            this.LoginBox.TextChanged += new System.EventHandler(this.TextBoxesValueChanged);
             // 
             // label1
             // 
@@ -86,8 +85,6 @@
             this.PasswordBox.Size = new System.Drawing.Size(179, 20);
             this.PasswordBox.TabIndex = 1;
             this.PasswordBox.UseSystemPasswordChar = true;
-            this.PasswordBox.TextChanged += new System.EventHandler(this.TextBoxesValueChanged);
-            this.PasswordBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PasswordBoxKeyPress);
             // 
             // label2
             // 
@@ -99,25 +96,25 @@
             this.label2.Text = "Пароль";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // authButton
+            // AuthorizeButton
             // 
-            this.authButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.authButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.authButton.Enabled = false;
-            this.authButton.Location = new System.Drawing.Point(0, 54);
-            this.authButton.Name = "authButton";
-            this.authButton.Size = new System.Drawing.Size(268, 23);
-            this.authButton.TabIndex = 2;
-            this.authButton.Text = "Авторизация";
-            this.authButton.UseVisualStyleBackColor = true;
-            this.authButton.Click += new System.EventHandler(this.AuthorizeButtonClick);
+            this.AuthorizeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AuthorizeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AuthorizeButton.Enabled = false;
+            this.AuthorizeButton.Location = new System.Drawing.Point(0, 54);
+            this.AuthorizeButton.Name = "AuthorizeButton";
+            this.AuthorizeButton.Size = new System.Drawing.Size(268, 23);
+            this.AuthorizeButton.TabIndex = 2;
+            this.AuthorizeButton.Text = "Авторизация";
+            this.AuthorizeButton.UseVisualStyleBackColor = true;
+            this.AuthorizeButton.Click += new System.EventHandler(this.AuthorizeButtonClick);
             // 
             // AuthForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(268, 79);
-            this.Controls.Add(this.authButton);
+            this.Controls.Add(this.AuthorizeButton);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -140,6 +137,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox PasswordBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button authButton;
+        private System.Windows.Forms.Button AuthorizeButton;
     }
 }

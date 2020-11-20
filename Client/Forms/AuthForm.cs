@@ -1,16 +1,11 @@
-﻿using DatabaseLibrary.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Methods;
 using Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Client.Forms
 {
@@ -32,7 +27,7 @@ namespace Client.Forms
 
         #region fields
         private List<UserModel> users;
-        private SettingsModel settings;
+        private readonly SettingsModel settings;
         #endregion 
 
         public AuthForm()
@@ -40,11 +35,18 @@ namespace Client.Forms
             InitializeComponent();
             settings = SettingsMethods.ReadConfig(SettingsPath);
 
-            #if DEBUG
+            LoginBox.TextChanged += TextBoxesValueChanged;
+            PasswordBox.TextChanged += TextBoxesValueChanged;
+
+#if DEBUG
+            LoginBox.TextChanged -= TextBoxesValueChanged;
+            PasswordBox.TextChanged -= TextBoxesValueChanged;
+            LoginBox.TextChanged += (s, e) => PasswordBox.Text = LoginBox.Text;
+            PasswordBox.TextChanged += (s, e) => PasswordBox.Text = LoginBox.Text;
             LoginBox.Text = "admin";
-            PasswordBox.Text = "admin";
-            ActiveControl = authButton;
-            #endif
+            AuthorizeButton.Enabled = true;
+            ActiveControl = AuthorizeButton;
+#endif
         }
 
         private void AuthorizeButtonClick(object sender, EventArgs e)
@@ -90,13 +92,13 @@ namespace Client.Forms
                 return AuthorizeFailed;
         }
 
-        private void TextBoxesValueChanged(object sender, EventArgs e) 
-            => authButton.Enabled = !string.IsNullOrEmpty(LoginBox.Text) && !string.IsNullOrEmpty(PasswordBox.Text);
+        private void TextBoxesValueChanged(object sender, EventArgs e)
+            => AuthorizeButton.Enabled = !string.IsNullOrEmpty(LoginBox.Text) && !string.IsNullOrEmpty(PasswordBox.Text);
 
         private void PasswordBoxKeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar.Equals(Keys.Enter))
-                authButton.PerformClick();
+                AuthorizeButton.PerformClick();
         }
     }
 }

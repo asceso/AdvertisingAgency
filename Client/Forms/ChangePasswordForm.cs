@@ -1,8 +1,8 @@
-﻿using DatabaseLibrary.Data;
+﻿using System.Windows.Forms;
+using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Enums;
 using Infrastructure.Methods;
-using System.Windows.Forms;
 
 namespace Client.Forms
 {
@@ -10,9 +10,9 @@ namespace Client.Forms
     {
         private const string OldPasswordWrong = "Старый пароль не совпадает с введенным.";
         private const string NewPasswordError = "Новый пароль не совпадает.";
-        private string connectionString;
+        private readonly string connectionString;
 
-        private UserModel user;
+        private readonly UserModel user;
 
         public ChangePasswordForm(UserModel user, string connectionString)
         {

@@ -1,15 +1,15 @@
-﻿using DatabaseLibrary.Data;
+﻿using System;
+using System.Windows.Forms;
+using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Enums;
-using System;
-using System.Windows.Forms;
 
 namespace Client.Forms
 {
     public partial class ConfirmClientDeletingForm : Form
     {
-        private ClientModel client;
-        private string connectionString;
+        private readonly ClientModel client;
+        private readonly string connectionString;
         public ConfirmClientDeletingForm(ClientModel client, string connectionString)
         {
             InitializeComponent();

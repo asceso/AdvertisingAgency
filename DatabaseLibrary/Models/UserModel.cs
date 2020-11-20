@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace DatabaseLibrary.Models
 {
@@ -24,27 +25,35 @@ namespace DatabaseLibrary.Models
         #region data props
 
         [DataProperty(1, 0)]
+        [Description("Имя")]
         public string FirstName { get; set; }
 
         [DataProperty(2, 1)]
+        [Description("Фамилия")]
         public string MiddleName { get; set; }
 
         [DataProperty(3, 2)]
+        [Description("Отчество")]
         public string LastName { get; set; }
 
         [DataProperty(4, 3)]
+        [Description("Должность")]
         public PositionModel Position { get; set; }
 
         [DataProperty(5, 4)]
+        [Description("Контактный номер")]
         public string ContactNumber { get; set; }
 
         [DataProperty(6, 5)]
+        [Description("Логин")]
         public string Login { get; set; }
 
         [DataProperty(7, 6)]
+        [Description("Пароль")]
         public string Password { get; set; }
 
         [DataProperty(7, 6)]
+        [Description("Роль")]
         public RoleModel Role { get; set; }
 
         #endregion data props

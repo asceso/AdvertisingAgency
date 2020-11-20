@@ -263,7 +263,7 @@
             this.Controls.Add(this.elemPanel);
             this.Name = "UserManageUserControl";
             this.Size = new System.Drawing.Size(702, 487);
-            this.Load += new System.EventHandler(this.UserManageUserControl_Load);
+            this.Load += new System.EventHandler(this.UserManageUserControlLoad);
             this.elemPanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

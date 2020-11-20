@@ -1,13 +1,16 @@
-﻿using DatabaseLibrary.Models;
-using System.Data.Common;
+﻿using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
     public class ServiceData : CommonData<ServiceModel>
     {
         public ServiceData(string connectionString) : base(connectionString, "Услуги")
-        {
-        }
+        { }
+
+        public ServiceData() : base(ConnectionString, "Услуги")
+        { }
+
         internal override ServiceModel MapModel(DbDataReader reader)
         {
             return new ServiceModel()

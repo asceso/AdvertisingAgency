@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace DatabaseLibrary.Models
 {
@@ -26,12 +27,15 @@ namespace DatabaseLibrary.Models
         #region data props
 
         [DataProperty(1, 0)]
+        [Description("Адрес")]
         public string Address { get; set; }
 
         [DataProperty(2, 1)]
+        [Description("Дополнительный контактный номер")]
         public string AdditionalContactNumber { get; set; }
 
         [DataProperty(3, 2)]
+        [Description("Предпочтения")]
         public string Preferences { get; set; }
 
         #endregion data props
@@ -42,9 +46,6 @@ namespace DatabaseLibrary.Models
             AdditionalContactNumber = string.Empty;
             Preferences = string.Empty;
         }
-        public AddditionalClientInfoModel(bool IsIgnorable = false) : base()
-        {
-            this.IsIgnorable = IsIgnorable;
-        }
+        public AddditionalClientInfoModel(bool IsIgnorable = false) : base() => this.IsIgnorable = IsIgnorable;
     }
 }

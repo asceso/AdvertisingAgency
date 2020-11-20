@@ -1,13 +1,15 @@
-﻿using DatabaseLibrary.Models;
-using System.Data.Common;
+﻿using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
     public class AddditionalClientInfoData : CommonData<AddditionalClientInfoModel>
     {
         public AddditionalClientInfoData(string connectionString) : base(connectionString, "Дополнительная информация клиентов")
-        {
-        }
+        { }
+
+        public AddditionalClientInfoData() : base(ConnectionString, "Дополнительная информация клиентов")
+        { }
 
         internal override AddditionalClientInfoModel MapModel(DbDataReader reader)
         {

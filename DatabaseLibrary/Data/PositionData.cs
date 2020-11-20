@@ -1,14 +1,16 @@
-﻿using DatabaseLibrary.Models;
-using System;
+﻿using System;
 using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
     public class PositionData : CommonData<PositionModel>
     {
         public PositionData(string connectionString) : base(connectionString, "Должности")
-        {
-        }
+        { }
+
+        public PositionData() : base(ConnectionString, "Должности")
+        { }
 
         internal override PositionModel MapModel(DbDataReader reader)
         {

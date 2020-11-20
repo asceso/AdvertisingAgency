@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace DatabaseLibrary.Models
 {
@@ -8,9 +9,13 @@ namespace DatabaseLibrary.Models
 
         [DataProperty(0, 3)]
         public override Guid ID { get => base.ID; set => base.ID = value; }
+
         [DataProperty(1, 0)]
+        [Description("Название")]
         public override string Name { get => base.Name; set => base.Name = value; }
+
         [DataProperty(2, 1)]
+        [Description("Описание")]
         public override string Description { get => base.Description; set => base.Description = value; }
 
         #endregion
@@ -18,9 +23,11 @@ namespace DatabaseLibrary.Models
         #region data props
 
         [DataProperty(3, 2)]
+        [Description("Стоимость")]
         public double Price { get; set; }
 
         #endregion data props
+
         public ServiceModel()
         {
             Price = 0;

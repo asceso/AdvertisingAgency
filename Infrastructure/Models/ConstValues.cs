@@ -3,7 +3,7 @@
     public class ConstValues
     {
         public const int NullIndex = -1;
-        public const int ZeroIndex = 0;
+        public const int Zero = 0;
 
         public enum RoleNames
         {

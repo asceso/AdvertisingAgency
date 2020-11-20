@@ -1,25 +1,27 @@
-﻿using Client.UserControls;
-using DatabaseLibrary.Data;
-using DatabaseLibrary.Models;
-using Infrastructure.Methods;
-using Infrastructure.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Client.UserControls;
+using Client.UserControls.GenericControls;
+using DatabaseLibrary.Data;
+using DatabaseLibrary.Models;
+using Infrastructure.Enums;
+using Infrastructure.Methods;
+using Infrastructure.Models;
 
 namespace Client.Forms
 {
     public partial class MainForm : Form
     {
-        private float step;
-        private SettingsModel settings;
-        private UserModel currentUser;
+        //private readonly float step;
+        private readonly SettingsModel settings;
+        private readonly UserModel currentUser;
         private List<UserModel> UsersCollection;
 
         public Size CurrentControlSize { get => CurrentControl.Size; set => CurrentControl.Size = value; }
 
-        public int UsersListSelectedIndex { get => UsersList.SelectedIndex; }
+        public int UsersListSelectedIndex => UsersList.SelectedIndex;
 
         public MainForm(SettingsModel settings, UserModel user)
         {
@@ -31,6 +33,7 @@ namespace Client.Forms
 
             UpdateUsersList();
             SetUsersManageButtonsByRole(nameof(ConstValues.RoleNames.Administrator));
+            SetRequestTypeButtonByRole(nameof(ConstValues.RoleNames.Administrator));
         }
 
         #region user controls
@@ -39,13 +42,13 @@ namespace Client.Forms
         {
             CurrentControl.Controls.Clear();
             CurrentControl.Controls.Add(opened);
-            CurrentControl.Controls[ConstValues.ZeroIndex].Focus();
+            CurrentControl.Controls[ConstValues.Zero].Focus();
         }
 
         private void CurrentControlResize(object sender, EventArgs e)
         {
-            if (!CurrentControl.Controls.Count.Equals(ConstValues.ZeroIndex))
-                CurrentControl.Controls[ConstValues.ZeroIndex].Size = CurrentControlSize;
+            if (!CurrentControl.Controls.Count.Equals(ConstValues.Zero))
+                CurrentControl.Controls[ConstValues.Zero].Size = CurrentControlSize;
         }
 
         #endregion user controls
@@ -70,6 +73,7 @@ namespace Client.Forms
             UsersManageButton.Enabled = currentUser.IsInRole(inputRoleName);
             UsersList.ContextMenuStrip = currentUser.IsInRole(inputRoleName) ? usersContextMenu : null;
         }
+        private void SetRequestTypeButtonByRole(string inputRoleName) => RequestTypeButton.Enabled = currentUser.IsInRole(inputRoleName);
 
         #endregion role permisions
 
@@ -89,9 +93,9 @@ namespace Client.Forms
             }
             UsersList.SelectedIndex = selected;
         }
-        private void UsersListKeyPress(object sender, KeyPressEventArgs e) 
+        private void UsersListKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar.Equals((char)Keys.Escape)) 
+            if (e.KeyChar.Equals((char)Keys.Escape))
                 UsersList.SelectedIndex = ConstValues.NullIndex;
         }
 
@@ -104,18 +108,30 @@ namespace Client.Forms
                 ChangeUserControl(new UserManageUserControl(UsersCollection[UsersList.SelectedIndex], this, settings.ConnectionString));
         }
 
-        private void InsertUserButtonClick(object sender, EventArgs e)
-        {
-            ChangeUserControl(new UserManageUserControl(new UserModel() { ID = Guid.Empty }, this, settings.ConnectionString));
-        }
+        private void InsertUserButtonClick(object sender, EventArgs e) 
+            => ChangeUserControl(new UserManageUserControl(new UserModel() { ID = Guid.Empty }, this, settings.ConnectionString));
 
         #endregion manage
 
         #endregion users
 
         private void ClientsButtonClick(object sender, EventArgs e)
+            => ChangeUserControl(new ClientsManageUserControl(this, settings.ConnectionString));
+
+        private void RequestTypeButtonClick(object sender, EventArgs e)
         {
-            ChangeUserControl(new ClientsManageUserControl(this, settings.ConnectionString));
+            GenericModelUserControl<RequestTypeModel, RequestTypeData> generic = new GenericModelUserControl<RequestTypeModel, RequestTypeData>
+                (this, settings.ConnectionString, SQLEnums.GetTableName(SQLEnums.TableNames.Типы_заявок));
+
+            ChangeUserControl(generic);
+        }
+
+        private void ServicesButtonClick(object sender, EventArgs e)
+        {
+            GenericModelUserControl<ServiceModel, ServiceData> generic = new GenericModelUserControl<ServiceModel, ServiceData>
+                (this, settings.ConnectionString, SQLEnums.GetTableName(SQLEnums.TableNames.Услуги));
+
+            ChangeUserControl(generic);
         }
 
         private void MenuStateButtonClick(object sender, EventArgs e)
@@ -134,27 +150,29 @@ namespace Client.Forms
             }
         }
 
-        [Obsolete("Тормозит систему, используйте WPF")]
-        private void GetAnim(float start, float end)
-        {
-            step = Math.Abs(end - start) / 50;
+        //[Obsolete("Тормозит систему, используйте WPF")]
+        //private void GetAnim(float start, float end)
+        //{
+        //    step = Math.Abs(end - start) / 50;
 
-            if (end - start < 0)
-                step = -step;
+        //    if (end - start < 0)
+        //        step = -step;
 
-            Timer animationTimer;
-            animationTimer = new Timer();
-            animationTimer.Interval = 1;
-            animationTimer.Tick += new EventHandler((o, ev) =>
-            {
-                MainTable.ColumnStyles[0].Width += step;
-                if (MainTable.ColumnStyles[0].Width >= 450 || MainTable.ColumnStyles[0].Width <= 100)
-                {
-                    animationTimer.Stop();
-                }
-            });
+        //    Timer animationTimer;
+        //    animationTimer = new Timer
+        //    {
+        //        Interval = 1
+        //    };
+        //    animationTimer.Tick += new EventHandler((o, ev) =>
+        //    {
+        //        MainTable.ColumnStyles[0].Width += step;
+        //        if (MainTable.ColumnStyles[0].Width >= 450 || MainTable.ColumnStyles[0].Width <= 100)
+        //        {
+        //            animationTimer.Stop();
+        //        }
+        //    });
 
-            animationTimer.Start();
-        }
+        //    animationTimer.Start();
+        //}
     }
 }

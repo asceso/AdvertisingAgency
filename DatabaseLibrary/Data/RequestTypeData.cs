@@ -1,13 +1,14 @@
-﻿using DatabaseLibrary.Models;
-using System.Data.Common;
+﻿using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
     public class RequestTypeData : CommonData<RequestTypeModel>
     {
         public RequestTypeData(string connectionString) : base(connectionString, "Типы заявок")
-        {
-        }
+        { }
+        public RequestTypeData() : base(ConnectionString, "Типы заявок")
+        { }
 
         internal override RequestTypeModel MapModel(DbDataReader reader)
         {

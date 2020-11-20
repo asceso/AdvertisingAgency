@@ -1,5 +1,5 @@
-﻿using DatabaseLibrary.Models;
-using System.Data.Common;
+﻿using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
@@ -7,10 +7,17 @@ namespace DatabaseLibrary.Data
     {
         private readonly PositionData Positions;
         private readonly RoleData Roles;
+
         public UserData(string connectionString) : base(connectionString, "Сотрудники")
         {
             Positions = new PositionData(connectionString);
             Roles = new RoleData(connectionString);
+        }
+
+        public UserData() : base(ConnectionString, "Сотрудники")
+        {
+            Positions = new PositionData(ConnectionString);
+            Roles = new RoleData(ConnectionString);
         }
 
         internal override UserModel MapModel(DbDataReader reader)

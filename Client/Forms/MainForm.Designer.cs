@@ -32,6 +32,8 @@
             this.MainTable = new System.Windows.Forms.TableLayoutPanel();
             this.MainMenu = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ServicesButton = new System.Windows.Forms.Button();
+            this.RequestTypeButton = new System.Windows.Forms.Button();
             this.ClientsButton = new System.Windows.Forms.Button();
             this.usersPanel = new System.Windows.Forms.Panel();
             this.UsersManageButton = new System.Windows.Forms.Button();
@@ -84,12 +86,38 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.ServicesButton);
+            this.panel1.Controls.Add(this.RequestTypeButton);
             this.panel1.Controls.Add(this.ClientsButton);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 230);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(442, 73);
+            this.panel1.Size = new System.Drawing.Size(442, 129);
             this.panel1.TabIndex = 8;
+            // 
+            // ServicesButton
+            // 
+            this.ServicesButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ServicesButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ServicesButton.Location = new System.Drawing.Point(0, 60);
+            this.ServicesButton.Name = "ServicesButton";
+            this.ServicesButton.Size = new System.Drawing.Size(438, 30);
+            this.ServicesButton.TabIndex = 2;
+            this.ServicesButton.Text = "Услуги";
+            this.ServicesButton.UseVisualStyleBackColor = true;
+            this.ServicesButton.Click += new System.EventHandler(this.ServicesButtonClick);
+            // 
+            // RequestTypeButton
+            // 
+            this.RequestTypeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RequestTypeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.RequestTypeButton.Location = new System.Drawing.Point(0, 30);
+            this.RequestTypeButton.Name = "RequestTypeButton";
+            this.RequestTypeButton.Size = new System.Drawing.Size(438, 30);
+            this.RequestTypeButton.TabIndex = 1;
+            this.RequestTypeButton.Text = "Типы заявок";
+            this.RequestTypeButton.UseVisualStyleBackColor = true;
+            this.RequestTypeButton.Click += new System.EventHandler(this.RequestTypeButtonClick);
             // 
             // ClientsButton
             // 
@@ -245,6 +273,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button ClientsButton;
         private System.Windows.Forms.Button menuStateButton;
+        private System.Windows.Forms.Button RequestTypeButton;
+        private System.Windows.Forms.Button ServicesButton;
     }
 }
 

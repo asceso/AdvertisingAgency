@@ -1,6 +1,6 @@
-﻿using DatabaseLibrary.Models;
-using System;
+﻿using System;
 using System.Data.Common;
+using DatabaseLibrary.Models;
 
 namespace DatabaseLibrary.Data
 {
@@ -8,9 +8,10 @@ namespace DatabaseLibrary.Data
     {
         private readonly AddditionalClientInfoData AddditionaClientlInfoes;
         public ClientData(string connectionString) : base(connectionString, "Клиенты")
-        {
-            AddditionaClientlInfoes = new AddditionalClientInfoData(connectionString);
-        }
+            => AddditionaClientlInfoes = new AddditionalClientInfoData(connectionString);
+
+        public ClientData() : base(ConnectionString, "Клиенты")
+            => AddditionaClientlInfoes = new AddditionalClientInfoData(ConnectionString);
 
         internal override ClientModel MapModel(DbDataReader reader)
         {

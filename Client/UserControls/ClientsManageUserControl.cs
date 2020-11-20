@@ -1,35 +1,34 @@
-﻿using Client.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using Client.Forms;
 using DatabaseLibrary;
 using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Enums;
 using Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace Client.UserControls
 {
-    public partial class ClientsManageUserControl : UserControl
+    public partial class ClientsManageUserControl : UserControl, IClosableUI
     {
         private readonly Color ColdClientColor = Color.FromArgb(135, 206, 250);
         private readonly Color HotClientColor = Color.FromArgb(189, 218, 87);
         private readonly Color ArchiveReasonColor = Color.FromArgb(221, 160, 221);
 
-        private readonly string connectionString;
-        private MainForm parentForm;
         private List<ClientModel> clientCollection;
         private List<ArchiveModel> archiveCollection;
         private string currentTarget;
         private string currentValue;
 
+        public string ConnectionString { get; set; }
+
         public ClientsManageUserControl(MainForm parentForm, string connectionString)
         {
             InitializeComponent();
-            this.parentForm = parentForm;
-            this.connectionString = connectionString;
+            ConnectionString = connectionString;
             Size = parentForm.CurrentControlSize;
             label1.BackColor = ColdClientColor;
             label2.BackColor = HotClientColor;
@@ -40,31 +39,35 @@ namespace Client.UserControls
         }
         private void UpdateArchiveList(int selected = ConstValues.NullIndex)
         {
-            using ArchiveData data = new ArchiveData(connectionString);
+            using ArchiveData data = new ArchiveData(ConnectionString);
             archiveCollection = data.GetDataCollection();
 
             ArchiveList.Items.Clear();
             foreach (var record in archiveCollection)
             {
-                List<string> archiveRow = new List<string>();
-                archiveRow.Add(record.Client.GetFullName);
-                archiveRow.Add(record.Reason);
+                List<string> archiveRow = new List<string>
+                {
+                    record.Client.GetFullName,
+                    record.Reason
+                };
 
-                ListViewItem sourceItem = new ListViewItem(archiveRow.ToArray());
-                sourceItem.BackColor = ArchiveReasonColor;
+                ListViewItem sourceItem = new ListViewItem(archiveRow.ToArray())
+                {
+                    BackColor = ArchiveReasonColor
+                };
 
                 ArchiveList.Items.Add(sourceItem);
             }
-            if (!selected.Equals(ConstValues.NullIndex) && !ArchiveList.Items.Count.Equals(ConstValues.ZeroIndex))
+            if (!selected.Equals(ConstValues.NullIndex) && !ArchiveList.Items.Count.Equals(ConstValues.Zero))
                 ArchiveList.Items[selected].Selected = true;
         }
         private void UpdateClientsList(int selected = ConstValues.NullIndex)
         {
-            using SQLExecuter sql = new SQLExecuter(connectionString);
+            using SQLExecuter sql = new SQLExecuter(ConnectionString);
             sql.ExecuteStoreProcedureWithoutParameters(nameof(SQLEnums.StoredProcedureNames.ОбнулитьПустыеДопИнфоКлиентов));
             sql.ExecuteStoreProcedureWithoutParameters(nameof(SQLEnums.StoredProcedureNames.УдалитьПустыеДопИнфо));
 
-            using ClientData data = new ClientData(connectionString);
+            using ClientData data = new ClientData(ConnectionString);
             if (checkBox1.Checked)
                 clientCollection = data.GetDataCollection();
             else
@@ -73,15 +76,17 @@ namespace Client.UserControls
             ClientsList.Items.Clear();
             foreach (var client in clientCollection)
             {
-                List<string> clientRow = new List<string>();
-                clientRow.Add(client.MiddleName);
-                clientRow.Add(client.FirstName);
-                clientRow.Add(client.LastName);
-                clientRow.Add(client.ContactNumber);
-                clientRow.Add(client.AddtionalInfo != null ? client.AddtionalInfo.AdditionalContactNumber : string.Empty);
-                clientRow.Add(client.AddtionalInfo != null ? client.AddtionalInfo.Address : string.Empty);
-                clientRow.Add(client.AddtionalInfo != null ? client.AddtionalInfo.Preferences : string.Empty);
-                clientRow.Add(client.OrdersCount.ToString());
+                List<string> clientRow = new List<string>
+                {
+                    client.MiddleName,
+                    client.FirstName,
+                    client.LastName,
+                    client.ContactNumber,
+                    client.AddtionalInfo != null ? client.AddtionalInfo.AdditionalContactNumber : string.Empty,
+                    client.AddtionalInfo != null ? client.AddtionalInfo.Address : string.Empty,
+                    client.AddtionalInfo != null ? client.AddtionalInfo.Preferences : string.Empty,
+                    client.OrdersCount.ToString()
+                };
                 ListViewItem sourceItem = new ListViewItem(clientRow.ToArray());
                 if (archiveCollection.Any(x => x.Client.ID.Equals(client.ID)))
                     sourceItem.BackColor = ArchiveReasonColor;
@@ -89,15 +94,17 @@ namespace Client.UserControls
                     sourceItem.BackColor = client.AddtionalInfo == null ? ColdClientColor : HotClientColor;
                 ClientsList.Items.Add(sourceItem);
             }
-            if (!selected.Equals(ConstValues.NullIndex) && !ClientsList.Items.Count.Equals(ConstValues.ZeroIndex))
+            if (!selected.Equals(ConstValues.NullIndex) &&
+                !ClientsList.Items.Count.Equals(ConstValues.Zero) &&
+                selected < ClientsList.Items.Count)
                 ClientsList.Items[selected].Selected = true;
         }
         private void ShowArchivedCheckedEvent(object sender, EventArgs e)
         {
-            if (ClientsList.SelectedIndices.Count.Equals(ConstValues.ZeroIndex))
+            if (ClientsList.SelectedIndices.Count.Equals(ConstValues.Zero))
                 UpdateClientsList();
             else
-                UpdateClientsList(ClientsList.SelectedIndices[ConstValues.ZeroIndex]);
+                UpdateClientsList(ClientsList.SelectedIndices[ConstValues.Zero]);
         }
 
         #region Clients list view doubleclickable
@@ -107,12 +114,7 @@ namespace Client.UserControls
             ListViewItem item = ClientsList.GetItemAt(e.X, e.Y);
             var subItem = item.GetSubItemAt(e.X, e.Y);
             editElemPanel.Visible = true;
-            editElemPanel.Location = new Point(0, (subItem.Bounds.Y + 1) + ClientsList.TopItem.Bounds.Top);
-
-            //editValueTextBox.Width = e.X < ClientsList.Columns[ConstValues.ZeroIndex].Width ?
-            //    ClientsList.Columns[ConstValues.ZeroIndex].Width :
-            //    subItem.Bounds.Width;
-
+            editElemPanel.Location = new Point(0, subItem.Bounds.Y + 1 + ClientsList.TopItem.Bounds.Top);
             currentValue = subItem.Text;
             currentTarget = ClientsList.Columns[item.SubItems.IndexOf(subItem)].Text;
             editValueTextBox.Mask = string.Empty;
@@ -129,18 +131,24 @@ namespace Client.UserControls
 
         private void AcceptEditButtonClick(object sender, EventArgs e)
         {
-            ClientModel oldModel = clientCollection[ClientsList.SelectedIndices[ConstValues.ZeroIndex]];
+            ClientModel oldModel = clientCollection[ClientsList.SelectedIndices[ConstValues.Zero]];
             ClientModel client = (ClientModel)oldModel.Clone();
             SwitchCurrentTargetToModelItem(ref client, editValueTextBox.Text);
-            using AddditionalClientInfoData addditionalData = new AddditionalClientInfoData(connectionString);
+            using AddditionalClientInfoData addditionalData = new AddditionalClientInfoData(ConnectionString);
             if (oldModel.AddtionalInfo != null)
-                addditionalData.UpdateData(client.AddtionalInfo, nameof(SQLEnums.StoredProcedureNames.ДопинфоИзменить));
+                addditionalData.UpdateData(
+                    client.AddtionalInfo,
+                    nameof(SQLEnums.StoredProcedureNames.ДопинфоИзменить)
+                    );
             else
-                addditionalData.InsertData(client.AddtionalInfo, nameof(SQLEnums.StoredProcedureNames.ДопинфоДобавить));
-            using ClientData clientData = new ClientData(connectionString);
+                addditionalData.InsertData(
+                    client.AddtionalInfo ?? new AddditionalClientInfoModel(true),
+                    nameof(SQLEnums.StoredProcedureNames.ДопинфоДобавить)
+                    );
+            using ClientData clientData = new ClientData(ConnectionString);
             clientData.UpdateData(client, nameof(SQLEnums.StoredProcedureNames.КлиентыИзменить));
             editElemPanel.Visible = false;
-            UpdateClientsList(ClientsList.SelectedIndices[ConstValues.ZeroIndex]);
+            UpdateClientsList(ClientsList.SelectedIndices[ConstValues.Zero]);
         }
 
         private void SwitchCurrentTargetToModelItem(ref ClientModel client, string value)
@@ -204,10 +212,8 @@ namespace Client.UserControls
         #endregion accept
 
         #region decline
-        private void ClientsListMouseCaptureChanged(object sender, EventArgs e)
-        {
-            editElemPanel.Visible = false;
-        }
+        private void ClientsListMouseCaptureChanged(object sender, EventArgs e) => editElemPanel.Visible = false;
+
         #endregion decline
 
         #endregion Clients list view doubleclickable
@@ -227,8 +233,8 @@ namespace Client.UserControls
         private void DeleteClientButtonClick(object sender, EventArgs e)
         {
             ConfirmClientDeletingForm deletingForm = new ConfirmClientDeletingForm(
-                clientCollection[ClientsList.SelectedIndices[ConstValues.ZeroIndex]],
-                connectionString
+                clientCollection[ClientsList.SelectedIndices[ConstValues.Zero]],
+                ConnectionString
                 );
             deletingForm.ShowDialog();
             UpdateArchiveList();
@@ -241,7 +247,7 @@ namespace Client.UserControls
 
         private void InsertClientButtonClick(object sender, EventArgs e)
         {
-            using ClientData data = new ClientData(connectionString);
+            using ClientData data = new ClientData(ConnectionString);
             data.InsertData(
                 new ClientModel()
                 {
@@ -257,9 +263,6 @@ namespace Client.UserControls
 
         #endregion Insert client
 
-        private void CloseViewClick(object sender, EventArgs e)
-        {
-            Dispose();
-        }
+        public void CloseViewClick(object sender, EventArgs e) => Dispose();
     }
 }
