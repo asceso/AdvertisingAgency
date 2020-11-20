@@ -51,7 +51,7 @@ namespace DatabaseLibrary.Models
 
         [DataProperty(8, 7)]
         [Description("Статус заявки")]
-        public bool Status { get; set; }
+        public int Status { get; set; }
 
         #endregion data props
 
@@ -59,7 +59,7 @@ namespace DatabaseLibrary.Models
         {
             Number = "0000000000";
             Address = string.Empty;
-            Status = false;
+            Status = 0;
             RequestType = new RequestTypeModel();
             Service = new ServiceModel();
             User = new UserModel();

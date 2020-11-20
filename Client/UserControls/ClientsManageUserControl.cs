@@ -14,28 +14,59 @@ namespace Client.UserControls
 {
     public partial class ClientsManageUserControl : UserControl, IClosableUI
     {
+        #region fields and props
+
         private readonly Color ColdClientColor = Color.FromArgb(135, 206, 250);
         private readonly Color HotClientColor = Color.FromArgb(189, 218, 87);
         private readonly Color ArchiveReasonColor = Color.FromArgb(221, 160, 221);
+        private readonly Color DisabledColor = Color.FromArgb(64, 64, 64);
 
         private List<ClientModel> clientCollection;
         private List<ArchiveModel> archiveCollection;
         private string currentTarget;
         private string currentValue;
+        private readonly MainForm parentForm;
 
         public string ConnectionString { get; set; }
+
+        #endregion fields and props
+
+        #region ctor
 
         public ClientsManageUserControl(MainForm parentForm, string connectionString)
         {
             InitializeComponent();
+            this.parentForm = parentForm;
             ConnectionString = connectionString;
             Size = parentForm.CurrentControlSize;
-            label1.BackColor = ColdClientColor;
-            label2.BackColor = HotClientColor;
-            checkBox1.BackColor = ArchiveReasonColor;
+            leadColorLabel.BackColor = ColdClientColor;
+            clientColorLabel.BackColor = HotClientColor;
+            showArchived.BackColor = ArchiveReasonColor;
+            closeView.Dock = (DockStyle)parentForm.Settings.CloseViewButtonPosition;
+
+            if (!parentForm.Settings.ShowAdditionalInfo)
+            {
+                ClientContactNumberAdditional.Width = 0;
+                ClientAddress.Width = 0;
+                ClientPreferences.Width = 0;
+            }
 
             UpdateArchiveList();
             UpdateClientsList();
+            SetButtonsEnabledByRole();
+        }
+        private void SetButtonsEnabledByRole()
+        {
+            insertClientButton.SetVisibleByPermission(
+                parentForm.currentUser.CheckPermission(DataPermissions.ClientInsert,
+                parentForm.currentPermissions));
+            deleteClientButton.SetVisibleByPermission(
+                parentForm.currentUser.CheckPermission(DataPermissions.ClientDelete,
+                parentForm.currentPermissions));
+            acceptEditButton.SetEnabledByPermission(
+                parentForm.currentUser.CheckPermission(DataPermissions.ClientUpdate,
+                parentForm.currentPermissions),
+                DisabledColor);
         }
         private void UpdateArchiveList(int selected = ConstValues.NullIndex)
         {
@@ -68,7 +99,7 @@ namespace Client.UserControls
             sql.ExecuteStoreProcedureWithoutParameters(nameof(SQLEnums.StoredProcedureNames.УдалитьПустыеДопИнфо));
 
             using ClientData data = new ClientData(ConnectionString);
-            if (checkBox1.Checked)
+            if (showArchived.Checked)
                 clientCollection = data.GetDataCollection();
             else
                 clientCollection = data.GetDataCollection().Where(x => !archiveCollection.Any(a => a.Client.ID.Equals(x.ID))).ToList();
@@ -106,6 +137,8 @@ namespace Client.UserControls
             else
                 UpdateClientsList(ClientsList.SelectedIndices[ConstValues.Zero]);
         }
+
+        #endregion ctor
 
         #region Clients list view doubleclickable
 

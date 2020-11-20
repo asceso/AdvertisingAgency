@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace DatabaseLibrary.Models
 {
@@ -61,9 +63,16 @@ namespace DatabaseLibrary.Models
         #region other
 
         [OtherProperty("Свойство возвращает ФИО сотрудника")]
-        public string GetFullName { get => $"{FirstName} {MiddleName} {LastName}"; }
+        public string GetFullName => $"{FirstName} {MiddleName} {LastName}";
 
-        public bool IsInRole(string RoleName) => Role.Name.Equals(RoleName);
+        /// <summary>
+        /// Проверить в списке разрешений
+        /// </summary>
+        /// <param name="inputPermission">проверяемое разрешение</param>
+        /// <param name="userPermissions">список разрешений пользователя</param>
+        /// <returns>если разрешение находится в проверяемом списке разрешений - True</returns>
+        public bool CheckPermission(string inputPermission, List<PermissionModel> userPermissions)
+            => userPermissions.Any(p => p.Name.Equals(inputPermission));
 
         #endregion other
 

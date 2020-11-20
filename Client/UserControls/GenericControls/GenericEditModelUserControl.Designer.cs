@@ -31,7 +31,7 @@
             this.manageButtons = new System.Windows.Forms.Panel();
             this.returnChangesButton = new System.Windows.Forms.Button();
             this.saveANDexitButton = new System.Windows.Forms.Button();
-            this.closeViewButton = new System.Windows.Forms.Button();
+            this.closeView = new System.Windows.Forms.Button();
             this.modelPanel = new System.Windows.Forms.Panel();
             this.manageButtons.SuspendLayout();
             this.SuspendLayout();
@@ -40,7 +40,7 @@
             // 
             this.manageButtons.Controls.Add(this.returnChangesButton);
             this.manageButtons.Controls.Add(this.saveANDexitButton);
-            this.manageButtons.Controls.Add(this.closeViewButton);
+            this.manageButtons.Controls.Add(this.closeView);
             this.manageButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.manageButtons.Location = new System.Drawing.Point(0, 0);
             this.manageButtons.Name = "manageButtons";
@@ -49,7 +49,12 @@
             // 
             // returnChangesButton
             // 
+            this.returnChangesButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.returnChangesButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.returnChangesButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.returnChangesButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.returnChangesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.returnChangesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.returnChangesButton.Location = new System.Drawing.Point(158, 0);
             this.returnChangesButton.Name = "returnChangesButton";
             this.returnChangesButton.Size = new System.Drawing.Size(158, 29);
@@ -60,7 +65,12 @@
             // 
             // saveANDexitButton
             // 
+            this.saveANDexitButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.saveANDexitButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.saveANDexitButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.saveANDexitButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.saveANDexitButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.saveANDexitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.saveANDexitButton.Location = new System.Drawing.Point(0, 0);
             this.saveANDexitButton.Name = "saveANDexitButton";
             this.saveANDexitButton.Size = new System.Drawing.Size(158, 29);
@@ -69,16 +79,21 @@
             this.saveANDexitButton.UseVisualStyleBackColor = true;
             this.saveANDexitButton.Click += new System.EventHandler(this.SaveAndExitButtonClick);
             // 
-            // closeViewButton
+            // closeView
             // 
-            this.closeViewButton.Dock = System.Windows.Forms.DockStyle.Right;
-            this.closeViewButton.Location = new System.Drawing.Point(356, 0);
-            this.closeViewButton.Name = "closeViewButton";
-            this.closeViewButton.Size = new System.Drawing.Size(108, 29);
-            this.closeViewButton.TabIndex = 0;
-            this.closeViewButton.Text = "Закрыть";
-            this.closeViewButton.UseVisualStyleBackColor = true;
-            this.closeViewButton.Click += new System.EventHandler(this.CloseViewClick);
+            this.closeView.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.closeView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.closeView.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.closeView.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.closeView.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.closeView.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeView.Location = new System.Drawing.Point(356, 0);
+            this.closeView.Name = "closeView";
+            this.closeView.Size = new System.Drawing.Size(108, 29);
+            this.closeView.TabIndex = 0;
+            this.closeView.Text = "Закрыть";
+            this.closeView.UseVisualStyleBackColor = true;
+            this.closeView.Click += new System.EventHandler(this.CloseViewClick);
             // 
             // modelPanel
             // 
@@ -108,7 +123,7 @@
         private System.Windows.Forms.Panel manageButtons;
         private System.Windows.Forms.Button returnChangesButton;
         private System.Windows.Forms.Button saveANDexitButton;
-        private System.Windows.Forms.Button closeViewButton;
+        private System.Windows.Forms.Button closeView;
         private System.Windows.Forms.Panel modelPanel;
     }
 }

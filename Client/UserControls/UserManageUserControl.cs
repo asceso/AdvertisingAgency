@@ -30,6 +30,7 @@ namespace Client.UserControls
             this.user = user;
             this.parentForm = parentForm;
             Size = parentForm.CurrentControlSize;
+            closeView.Dock = (DockStyle)parentForm.Settings.CloseViewButtonPosition;
             AcceptChangesButton.Enabled = false;
 
             if (!user.ID.Equals(Guid.Empty))
@@ -58,14 +59,14 @@ namespace Client.UserControls
             foreach (var item in Enum.GetNames(typeof(ModelProps)))
                 modelHasValue.Add(item, false);
 
-            textBox1.TextChanged += (s, e)
-                => modelHasValue.DictionaryWithButtonEnableManagement(textBox1, nameof(ModelProps.FirstName), AcceptChangesButton);
-            textBox2.TextChanged += (s, e)
-                => modelHasValue.DictionaryWithButtonEnableManagement(textBox2, nameof(ModelProps.MiddleName), AcceptChangesButton);
-            textBox3.TextChanged += (s, e)
-                => modelHasValue.DictionaryWithButtonEnableManagement(textBox3, nameof(ModelProps.LastName), AcceptChangesButton);
-            comboBox1.SelectedIndexChanged += (s, e)
-                => modelHasValue.DictionaryWithButtonEnableManagement(comboBox1, nameof(ModelProps.Position), AcceptChangesButton);
+            fNameTextBox.TextChanged += (s, e)
+                => modelHasValue.DictionaryWithButtonEnableManagement(fNameTextBox, nameof(ModelProps.FirstName), AcceptChangesButton);
+            mNameTextBox.TextChanged += (s, e)
+                => modelHasValue.DictionaryWithButtonEnableManagement(mNameTextBox, nameof(ModelProps.MiddleName), AcceptChangesButton);
+            lNameTextBox.TextChanged += (s, e)
+                => modelHasValue.DictionaryWithButtonEnableManagement(lNameTextBox, nameof(ModelProps.LastName), AcceptChangesButton);
+            positionsComboBox.SelectedIndexChanged += (s, e)
+                => modelHasValue.DictionaryWithButtonEnableManagement(positionsComboBox, nameof(ModelProps.Position), AcceptChangesButton);
         }
 
         private async void DeleteButtonClick(object sender, EventArgs e)
@@ -81,17 +82,17 @@ namespace Client.UserControls
             using (PositionData data = new PositionData(ConnectionString))
                 positions = data.GetDataCollection().Where(p => !p.Name.Equals("Директор")).ToList();
 
-            comboBox1.Items.Clear();
+            positionsComboBox.Items.Clear();
             foreach (PositionModel position in positions)
-                comboBox1.Items.Add(position.Name);
+                positionsComboBox.Items.Add(position.Name);
 
-            textBox1.Text = user.FirstName;
-            textBox2.Text = user.MiddleName;
-            textBox3.Text = user.LastName;
-            maskedTextBox1.Text = user.ContactNumber;
+            fNameTextBox.Text = user.FirstName;
+            mNameTextBox.Text = user.MiddleName;
+            lNameTextBox.Text = user.LastName;
+            contactNumberTextBox.Text = user.ContactNumber;
 
             if (!user.ID.Equals(Guid.Empty))
-                comboBox1.SelectedItem = positions.FirstOrDefault(p => p.ID.Equals(user.Position.ID)).Name;
+                positionsComboBox.SelectedItem = positions.FirstOrDefault(p => p.ID.Equals(user.Position.ID)).Name;
         }
 
         private async void AcceptChangesButtonClick(object sender, EventArgs e)
@@ -108,11 +109,11 @@ namespace Client.UserControls
             using (UserData data = new UserData(ConnectionString))
             {
                 UserModel updated = user;
-                updated.FirstName = textBox1.Text;
-                updated.MiddleName = textBox2.Text;
-                updated.LastName = textBox3.Text;
-                updated.Position = positions.FirstOrDefault(p => p.Name.Equals(comboBox1.SelectedItem));
-                updated.ContactNumber = maskedTextBox1.Text;
+                updated.FirstName = fNameTextBox.Text;
+                updated.MiddleName = mNameTextBox.Text;
+                updated.LastName = lNameTextBox.Text;
+                updated.Position = positions.FirstOrDefault(p => p.Name.Equals(positionsComboBox.SelectedItem));
+                updated.ContactNumber = contactNumberTextBox.Text;
                 await data.UpdateDataAsync(updated, nameof(SQLEnums.StoredProcedureNames.СотрудникиИзменить));
             }
             parentForm.UpdateUsersList(parentForm.UsersListSelectedIndex);
@@ -126,11 +127,11 @@ namespace Client.UserControls
                 UserModel user = new UserModel()
                 {
                     ID = Guid.NewGuid(),
-                    FirstName = textBox1.Text,
-                    MiddleName = textBox2.Text,
-                    LastName = textBox3.Text,
-                    Position = positions.FirstOrDefault(p => p.Name.Equals(comboBox1.SelectedItem)),
-                    ContactNumber = maskedTextBox1.Text
+                    FirstName = fNameTextBox.Text,
+                    MiddleName = mNameTextBox.Text,
+                    LastName = lNameTextBox.Text,
+                    Position = positions.FirstOrDefault(p => p.Name.Equals(positionsComboBox.SelectedItem)),
+                    ContactNumber = contactNumberTextBox.Text
                 };
                 user.Role = GetRoleByPosition(user.Position);
                 await data.InsertDataAsync(user, nameof(SQLEnums.StoredProcedureNames.СотрудникиДобавить));

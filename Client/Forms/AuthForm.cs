@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Client.Properties;
 using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Methods;
@@ -33,6 +34,7 @@ namespace Client.Forms
         public AuthForm()
         {
             InitializeComponent();
+            Icon = Resources.system;
             settings = SettingsMethods.ReadConfig(SettingsPath);
 
             LoginBox.TextChanged += TextBoxesValueChanged;
@@ -66,7 +68,10 @@ namespace Client.Forms
             MainForm main = new MainForm(settings, users.FirstOrDefault(u => u.Login.Equals(LoginBox.Text)));
             Hide();
             main.ShowDialog();
-            Application.Exit();
+            if (main.ApplicationExitReady)
+                Application.Exit();
+            else
+                Show();
         }
 
         private string CheckLogin(string login)

@@ -19,7 +19,7 @@ namespace Client.UserControls.GenericControls
         where ModelType : DataModel, new()
     {
         #region ctor
-
+        internal SettingsModel Settings;
         private readonly DataType data;
 
         #region props
@@ -31,12 +31,19 @@ namespace Client.UserControls.GenericControls
 
         #endregion props
 
-        public GenericModelUserControl(MainForm parentForm, string connectionString, string tableName)
+        public GenericModelUserControl(MainForm parentForm, string connectionString, string tableName, bool[] permissionStates)
         {
             InitializeComponent();
+
+            insertButton.Visible = permissionStates[0];
+            updateButton.Visible = permissionStates[1];
+            deleteButton.Visible = permissionStates[2];
+
             ConnectionString = connectionString;
             TableName = tableName;
+            Settings = parentForm.Settings;
             Size = parentForm.CurrentControlSize;
+            closeView.Dock = (DockStyle)parentForm.Settings.CloseViewButtonPosition;
             Models = new ObservableCollection<ModelType>();
             data = (DataType)Activator.CreateInstance(typeof(DataType));
             data.connection.ConnectionString = connectionString;

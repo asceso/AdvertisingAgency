@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Client.Properties;
 using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Enums;
@@ -13,6 +14,7 @@ namespace Client.Forms
         public ConfirmClientDeletingForm(ClientModel client, string connectionString)
         {
             InitializeComponent();
+            Icon = Resources.system;
             this.client = client;
             this.connectionString = connectionString;
         }

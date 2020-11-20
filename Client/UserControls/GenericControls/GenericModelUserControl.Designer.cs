@@ -30,10 +30,10 @@
         {
             this.managePanel = new System.Windows.Forms.Panel();
             this.refreshButton = new System.Windows.Forms.Button();
-            this.closeView = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.updateButton = new System.Windows.Forms.Button();
             this.insertButton = new System.Windows.Forms.Button();
+            this.closeView = new System.Windows.Forms.Button();
             this.SourceList = new System.Windows.Forms.ListView();
             this.headerLabel = new System.Windows.Forms.Label();
             this.managePanel.SuspendLayout();
@@ -42,10 +42,10 @@
             // managePanel
             // 
             this.managePanel.Controls.Add(this.refreshButton);
-            this.managePanel.Controls.Add(this.closeView);
             this.managePanel.Controls.Add(this.deleteButton);
             this.managePanel.Controls.Add(this.updateButton);
             this.managePanel.Controls.Add(this.insertButton);
+            this.managePanel.Controls.Add(this.closeView);
             this.managePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.managePanel.Location = new System.Drawing.Point(0, 0);
             this.managePanel.Name = "managePanel";
@@ -56,6 +56,10 @@
             // 
             this.refreshButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.refreshButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.refreshButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.refreshButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.refreshButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray;
+            this.refreshButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.refreshButton.Location = new System.Drawing.Point(450, 0);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(150, 25);
@@ -64,23 +68,15 @@
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.RefreshButtonClick);
             // 
-            // closeView
-            // 
-            this.closeView.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.closeView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.closeView.Location = new System.Drawing.Point(677, 0);
-            this.closeView.Name = "closeView";
-            this.closeView.Size = new System.Drawing.Size(25, 25);
-            this.closeView.TabIndex = 3;
-            this.closeView.Text = "X";
-            this.closeView.UseVisualStyleBackColor = true;
-            this.closeView.Click += new System.EventHandler(this.CloseViewClick);
-            // 
             // deleteButton
             // 
             this.deleteButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.deleteButton.Dock = System.Windows.Forms.DockStyle.Left;
             this.deleteButton.Enabled = false;
+            this.deleteButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.deleteButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.deleteButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray;
+            this.deleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteButton.Location = new System.Drawing.Point(300, 0);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(150, 25);
@@ -94,6 +90,10 @@
             this.updateButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.updateButton.Dock = System.Windows.Forms.DockStyle.Left;
             this.updateButton.Enabled = false;
+            this.updateButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.updateButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.updateButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray;
+            this.updateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.updateButton.Location = new System.Drawing.Point(150, 0);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(150, 25);
@@ -106,6 +106,10 @@
             // 
             this.insertButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.insertButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.insertButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.insertButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.insertButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray;
+            this.insertButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.insertButton.Location = new System.Drawing.Point(0, 0);
             this.insertButton.Name = "insertButton";
             this.insertButton.Size = new System.Drawing.Size(150, 25);
@@ -113,6 +117,22 @@
             this.insertButton.Text = "Добавить";
             this.insertButton.UseVisualStyleBackColor = true;
             this.insertButton.Click += new System.EventHandler(this.InsertButtonClick);
+            // 
+            // closeView
+            // 
+            this.closeView.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.closeView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.closeView.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.closeView.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.closeView.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray;
+            this.closeView.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeView.Location = new System.Drawing.Point(677, 0);
+            this.closeView.Name = "closeView";
+            this.closeView.Size = new System.Drawing.Size(25, 25);
+            this.closeView.TabIndex = 3;
+            this.closeView.Text = "X";
+            this.closeView.UseVisualStyleBackColor = true;
+            this.closeView.Click += new System.EventHandler(this.CloseViewClick);
             // 
             // SourceList
             // 

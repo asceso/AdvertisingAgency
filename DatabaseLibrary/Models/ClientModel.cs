@@ -53,7 +53,7 @@ namespace DatabaseLibrary.Models
         #region other
 
         [OtherProperty("Свойство возвращает ФИО клиента")]
-        public string GetFullName { get => $"{FirstName} {MiddleName} {LastName}"; }
+        public string GetFullName => $"{FirstName} {MiddleName} {LastName}";
 
         #endregion other
 
@@ -66,9 +66,6 @@ namespace DatabaseLibrary.Models
             OrdersCount = 0;
         }
 
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
+        public object Clone() => MemberwiseClone();
     }
 }

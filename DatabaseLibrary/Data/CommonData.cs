@@ -33,11 +33,12 @@ namespace DatabaseLibrary.Data
 
         #region typed methods
 
-        private List<DataType> GetCollectionFromReader(OleDbDataReader reader)
+        internal List<DataType> GetCollectionFromReader(OleDbDataReader reader)
         {
             List<DataType> result = new List<DataType>();
             while (reader.Read())
                 result.Add(MapModel(reader));
+            reader.Close();
             return result;
         }
 
@@ -60,6 +61,7 @@ namespace DatabaseLibrary.Data
             OleDbDataReader reader = command.ExecuteReader();
             reader.Read();
             var result = MapModel(reader);
+            reader.Close();
             connection.Close();
             return result;
         }
@@ -186,11 +188,12 @@ namespace DatabaseLibrary.Data
 
         #region typed methods
 
-        private async Task<List<DataType>> GetCollectionFromReaderAsync(DbDataReader reader)
+        internal async Task<List<DataType>> GetCollectionFromReaderAsync(DbDataReader reader)
         {
             List<DataType> result = new List<DataType>();
             while (await reader.ReadAsync())
                 result.Add(MapModel(reader));
+            reader.Close();
             return result;
         }
 
@@ -201,7 +204,6 @@ namespace DatabaseLibrary.Data
             command.CommandText = CreateSqlQuery(SQLEnums.QueryTypes.SELECT, TableName);
             DbDataReader asyncReader = await command.ExecuteReaderAsync();
             var result = await GetCollectionFromReaderAsync(asyncReader);
-            asyncReader.Close();
             connection.Close();
             return result;
         }

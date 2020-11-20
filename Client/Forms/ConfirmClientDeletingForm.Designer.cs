@@ -46,6 +46,7 @@
             // 
             this.acceptButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.acceptButton.Enabled = false;
+            this.acceptButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.acceptButton.Location = new System.Drawing.Point(0, 66);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(432, 23);

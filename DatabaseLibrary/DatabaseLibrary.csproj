@@ -53,6 +53,7 @@
     <Compile Include="Data\ArchiveData.cs" />
     <Compile Include="Data\ClientData.cs" />
     <Compile Include="Data\CommonData.cs" />
+    <Compile Include="Data\PermissionData.cs" />
     <Compile Include="Data\PositionData.cs" />
     <Compile Include="Data\RequestData.cs" />
     <Compile Include="Data\RequestTypeData.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Models\AddditionalClientInfoModel.cs" />
     <Compile Include="Models\ArchiveModel.cs" />
     <Compile Include="Models\ClientModel.cs" />
+    <Compile Include="Models\PermissionModel.cs" />
     <Compile Include="Models\PositionModel.cs" />
     <Compile Include="Models\RequestModel.cs" />
     <Compile Include="Models\RequestTypeModel.cs" />

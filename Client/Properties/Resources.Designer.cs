@@ -63,9 +63,113 @@ namespace Client.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap accept {
+        internal static System.Drawing.Bitmap change_user {
             get {
-                object obj = ResourceManager.GetObject("accept", resourceCulture);
+                object obj = ResourceManager.GetObject("change_user", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сменить пользователя.
+        /// </summary>
+        internal static string ChangeAccountButtonText {
+            get {
+                return ResourceManager.GetString("ChangeAccountButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap clients {
+            get {
+                object obj = ResourceManager.GetObject("clients", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на База клиентов.
+        /// </summary>
+        internal static string ClientsButtonText {
+            get {
+                return ResourceManager.GetString("ClientsButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap close {
+            get {
+                object obj = ResourceManager.GetObject("close", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыть программу.
+        /// </summary>
+        internal static string CloseApplicationButtonText {
+            get {
+                return ResourceManager.GetString("CloseApplicationButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Новый пользователь.
+        /// </summary>
+        internal static string InsertUserButtonText {
+            get {
+                return ResourceManager.GetString("InsertUserButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap maximize {
+            get {
+                object obj = ResourceManager.GetObject("maximize", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Свернуть меню.
+        /// </summary>
+        internal static string MenuStateButtonText {
+            get {
+                return ResourceManager.GetString("MenuStateButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap minimize {
+            get {
+                object obj = ResourceManager.GetObject("minimize", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на .
+        /// </summary>
+        internal static string NullString {
+            get {
+                return ResourceManager.GetString("NullString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap request {
+            get {
+                object obj = ResourceManager.GetObject("request", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +177,104 @@ namespace Client.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap decline {
+        internal static System.Drawing.Bitmap request_type {
             get {
-                object obj = ResourceManager.GetObject("decline", resourceCulture);
+                object obj = ResourceManager.GetObject("request_type", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Заявки.
+        /// </summary>
+        internal static string RequestButtonText {
+            get {
+                return ResourceManager.GetString("RequestButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Типы заявок.
+        /// </summary>
+        internal static string RequestTypeButtonText {
+            get {
+                return ResourceManager.GetString("RequestTypeButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap service {
+            get {
+                object obj = ResourceManager.GetObject("service", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Услуги.
+        /// </summary>
+        internal static string ServicesButtonText {
+            get {
+                return ResourceManager.GetString("ServicesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settings {
+            get {
+                object obj = ResourceManager.GetObject("settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Настройки.
+        /// </summary>
+        internal static string SettingsButtonText {
+            get {
+                return ResourceManager.GetString("SettingsButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon system {
+            get {
+                object obj = ResourceManager.GetObject("system", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Изменить пользователя.
+        /// </summary>
+        internal static string UpdateUserButtonText {
+            get {
+                return ResourceManager.GetString("UpdateUserButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap user_edit {
+            get {
+                object obj = ResourceManager.GetObject("user_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap user_new {
+            get {
+                object obj = ResourceManager.GetObject("user_new", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

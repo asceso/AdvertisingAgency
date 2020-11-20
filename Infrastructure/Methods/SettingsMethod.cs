@@ -26,10 +26,8 @@ namespace Infrastructure.Methods
         public static void SetConfig(SettingsModel settings)
         {
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-            using (StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + "\\AppSettings.json"))
-            {
-                writer.Write(json);
-            }
+            using StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + "\\AppSettings.json");
+            writer.Write(json);
         }
 
         public static void CheckDatabaseExist(SettingsModel settings)

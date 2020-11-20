@@ -34,10 +34,14 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\system.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.Shell.15.0, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Framework, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Threading, Version=16.7.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,7 +58,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserControls\DictionaryExtension.cs" />
+    <Compile Include="ControlPermissionExtension.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DictionaryExtension.cs" />
     <Compile Include="Forms\AuthForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,17 +109,17 @@
     <Compile Include="UserControls\GenericControls\GenericModelUserControl.Designer.cs">
       <DependentUpon>GenericModelUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\RequestTypes\EditRequestTypeUserControl.cs">
+    <Compile Include="UserControls\RequestUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\RequestTypes\EditRequestTypeUserControl.Designer.cs">
-      <DependentUpon>EditRequestTypeUserControl.cs</DependentUpon>
+    <Compile Include="UserControls\RequestUserControl.Designer.cs">
+      <DependentUpon>RequestUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\RequestTypes\RequestTypeUserControl.cs">
+    <Compile Include="UserControls\SettingsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\RequestTypes\RequestTypeUserControl.Designer.cs">
-      <DependentUpon>RequestTypeUserControl.cs</DependentUpon>
+    <Compile Include="UserControls\SettingsUserControl.Designer.cs">
+      <DependentUpon>SettingsUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserManageUserControl.cs">
       <SubType>UserControl</SubType>
@@ -131,14 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="UserControls\ClientsManageUserControl.resx">
       <DependentUpon>ClientsManageUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,15 +153,18 @@
     <EmbeddedResource Include="UserControls\GenericControls\GenericModelUserControl.resx">
       <DependentUpon>GenericModelUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\RequestTypes\EditRequestTypeUserControl.resx">
-      <DependentUpon>EditRequestTypeUserControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\RequestUserControl.resx">
+      <DependentUpon>RequestUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\RequestTypes\RequestTypeUserControl.resx">
-      <DependentUpon>RequestTypeUserControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\SettingsUserControl.resx">
+      <DependentUpon>SettingsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserManageUserControl.resx">
       <DependentUpon>UserManageUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="AppSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -180,14 +188,42 @@
       <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\accept.png" />
+    <None Include="Resources\system.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\decline.png" />
+    <None Include="Resources\close.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <None Include="Resources\maximize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\change_user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\request.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\request_type.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\service.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clients.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

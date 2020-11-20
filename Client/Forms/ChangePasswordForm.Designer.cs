@@ -135,6 +135,7 @@
             this.ChangePassword.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ChangePassword.Dock = System.Windows.Forms.DockStyle.Top;
             this.ChangePassword.Enabled = false;
+            this.ChangePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ChangePassword.Location = new System.Drawing.Point(0, 81);
             this.ChangePassword.Name = "ChangePassword";
             this.ChangePassword.Size = new System.Drawing.Size(314, 23);

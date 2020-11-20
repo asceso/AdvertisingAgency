@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Client.Properties;
 using DatabaseLibrary.Data;
 using DatabaseLibrary.Models;
 using Infrastructure.Enums;
@@ -17,6 +18,7 @@ namespace Client.Forms
         public ChangePasswordForm(UserModel user, string connectionString)
         {
             InitializeComponent();
+            Icon = Resources.system;
             this.user = user;
             this.connectionString = connectionString;
             textBox1.TextChanged += PasswordTBCheck;
@@ -24,9 +26,7 @@ namespace Client.Forms
             ChangePassword.Click += ChangePasswordClick;
         }
         private void PasswordTBCheck(object sender, System.EventArgs e)
-        {
-            ChangePassword.Enabled = (!string.IsNullOrEmpty(textBox1.Text) && !string.IsNullOrEmpty(textBox2.Text));
-        }
+            => ChangePassword.Enabled = !string.IsNullOrEmpty(textBox1.Text) && !string.IsNullOrEmpty(textBox2.Text);
         private void ChangePasswordClick(object sender, System.EventArgs e)
         {
             if (!CheckOldPassword(user.Password, textBox0.Text))

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Client.Properties;
 using Client.UserControls;
 using Client.UserControls.GenericControls;
 using DatabaseLibrary.Data;
@@ -14,27 +16,107 @@ namespace Client.Forms
 {
     public partial class MainForm : Form
     {
-        //private readonly float step;
-        private readonly SettingsModel settings;
-        private readonly UserModel currentUser;
+        #region fields and props
+
+        private readonly string settingsPath = Environment.CurrentDirectory + "\\AppSettings.json";
         private List<UserModel> UsersCollection;
 
-        public Size CurrentControlSize { get => CurrentControl.Size; set => CurrentControl.Size = value; }
+        internal SettingsModel Settings;
+        internal bool ApplicationExitReady;
+        internal readonly UserModel currentUser;
+        internal List<PermissionModel> currentPermissions;
+        internal Size CurrentControlSize { get => CurrentControl.Size; set => CurrentControl.Size = value; }
+        internal int UsersListSelectedIndex => UsersList.SelectedIndex;
 
-        public int UsersListSelectedIndex => UsersList.SelectedIndex;
+        #endregion fields and props
 
+        #region ctor
         public MainForm(SettingsModel settings, UserModel user)
         {
-
             InitializeComponent();
-            this.settings = settings;
+            Text = $"Рекламное агентство (Пользователь: {user.Login})";
+            Settings = settings;
             currentUser = user;
+            UpdateCurrentPermissions();
+
+            Icon = Resources.system;
+            WindowState = (FormWindowState)settings.FullScreenAtStart;
+
+            SetButtonsText(true);
+            SetImages();
+
+            ApplicationExitReady = true;
             SettingsMethods.CheckDatabaseExist(settings);
 
             UpdateUsersList();
-            SetUsersManageButtonsByRole(nameof(ConstValues.RoleNames.Administrator));
-            SetRequestTypeButtonByRole(nameof(ConstValues.RoleNames.Administrator));
+            SetButtonsEnabledByRole();
         }
+
+        #region role permisions
+
+        private void UpdateCurrentPermissions()
+        {
+            using PermissionData data = new PermissionData(Settings.ConnectionString);
+            currentPermissions = currentUser.Role.Name.Equals(nameof(ConstValues.RoleNames.Administrator)) ?
+            data.GetDataCollection() : data.GetPermissionListByRoleGuid(currentUser.Role.ID);
+        }
+
+        private void SetButtonsEnabledByRole()
+        {
+            InsertUserButton.SetEnabledByPermission(currentUser.CheckPermission(DataPermissions.UserInsert, currentPermissions));
+            UpdateUserButton.SetEnabledByPermission(currentUser.CheckPermission(DataPermissions.UserUpdate, currentPermissions));
+            RequestTypeButton.SetEnabledByPermission(currentUser.CheckPermission(DataPermissions.RequestTypeGet, currentPermissions));
+            ServicesButton.SetEnabledByPermission(currentUser.CheckPermission(DataPermissions.ServiceGet, currentPermissions));
+
+            UsersList.UseContextMenuStripByPermission(
+                currentUser.CheckPermission(DataPermissions.UserDelete, currentPermissions),
+                usersContextMenu);
+        }
+
+        #endregion role permisions
+
+        #endregion ctor
+
+        #region form initializing
+
+        private void SetButtonsText(bool state)
+        {
+            SetButtonTextInControlCollection(MainMenu, state);
+            SetButtonTextInControlCollection(UsersPanel, state);
+            SetButtonTextInControlCollection(ApplicationButtonsPanel, state);
+            SetButtonTextInControlCollection(SystemButtons, state);
+        }
+        private void SetButtonTextInControlCollection(Control control, bool state)
+        {
+            foreach (Control item in control.Controls)
+            {
+                if (item is Button)
+                {
+                    var current = item as Button;
+                    current.Text = state ? Resources.ResourceManager.GetString($"{current.Name}Text") : Resources.NullString;
+                    current.ImageAlign = state ? ContentAlignment.TopRight : ContentAlignment.TopCenter;
+                }
+            }
+        }
+        private void SetImages()
+        {
+            ChangeAccountButton.Image = GetSmallIconFromBitmap(Resources.change_user);
+            CloseApplicationButton.Image = GetSmallIconFromBitmap(Resources.close);
+            MenuStateButton.Image = GetSmallIconFromBitmap(Resources.minimize);
+            InsertUserButton.Image = GetSmallIconFromBitmap(Resources.user_new);
+            UpdateUserButton.Image = GetSmallIconFromBitmap(Resources.user_edit);
+            ClientsButton.Image = GetSmallIconFromBitmap(Resources.clients);
+            RequestButton.Image = GetSmallIconFromBitmap(Resources.request);
+            RequestTypeButton.Image = GetSmallIconFromBitmap(Resources.request_type);
+            ServicesButton.Image = GetSmallIconFromBitmap(Resources.service);
+            SettingsButton.Image = GetSmallIconFromBitmap(Resources.settings);
+        }
+
+        private Image GetSmallIconFromBitmap(Bitmap source) => new Bitmap(source, new Size(20, 20));
+
+        internal void UpdateSettings() => Settings = SettingsMethods.ReadConfig(settingsPath);
+
+        #endregion form initializing
 
         #region user controls
 
@@ -43,6 +125,8 @@ namespace Client.Forms
             CurrentControl.Controls.Clear();
             CurrentControl.Controls.Add(opened);
             CurrentControl.Controls[ConstValues.Zero].Focus();
+            if (Settings.HideBorderMenu && !MenuStateButton.Text.Equals(string.Empty))
+                ChangeCollumnStylesAndMenuButton();
         }
 
         private void CurrentControlResize(object sender, EventArgs e)
@@ -51,12 +135,20 @@ namespace Client.Forms
                 CurrentControl.Controls[ConstValues.Zero].Size = CurrentControlSize;
         }
 
+        private void CurrentControlControlRemoved(object sender, ControlEventArgs e)
+        {
+            if (!Settings.RestoreBorderMenu)
+                return;
+            if (CurrentControl.Controls.Count.Equals(ConstValues.Zero) && MenuStateButton.Text.Equals(string.Empty))
+                ChangeCollumnStylesAndMenuButton();
+        }
+
         #endregion user controls
 
         #region password context menu
         private void ChangeUserPasswordClick(object sender, EventArgs e)
         {
-            ChangePasswordForm change = new ChangePasswordForm(UsersCollection[UsersList.SelectedIndex], settings.ConnectionString);
+            ChangePasswordForm change = new ChangePasswordForm(UsersCollection[UsersList.SelectedIndex], Settings.ConnectionString);
             change.ShowDialog();
         }
 
@@ -65,32 +157,17 @@ namespace Client.Forms
 
         #endregion password context menu
 
-        #region role permisions
-
-        private void SetUsersManageButtonsByRole(string inputRoleName)
-        {
-            InsertUserButton.Enabled = currentUser.IsInRole(inputRoleName);
-            UsersManageButton.Enabled = currentUser.IsInRole(inputRoleName);
-            UsersList.ContextMenuStrip = currentUser.IsInRole(inputRoleName) ? usersContextMenu : null;
-        }
-        private void SetRequestTypeButtonByRole(string inputRoleName) => RequestTypeButton.Enabled = currentUser.IsInRole(inputRoleName);
-
-        #endregion role permisions
-
         #region users
 
         internal void UpdateUsersList(int selected = ConstValues.NullIndex)
         {
-            using (UserData data = new UserData(settings.ConnectionString))
-                UsersCollection = data.GetDataCollection();
+            using (UserData data = new UserData(Settings.ConnectionString))
+                UsersCollection = data.GetDataCollection().Where(p => !p.Login.Equals("admin")).ToList();
 
             UsersList.Items.Clear();
             foreach (var user in UsersCollection)
-            {
-                if (user.Login.Equals("admin"))
-                    continue;
                 UsersList.Items.Add($"{user.GetFullName}, {user.Position.Name}, {user.ContactNumber}");
-            }
+
             UsersList.SelectedIndex = selected;
         }
         private void UsersListKeyPress(object sender, KeyPressEventArgs e)
@@ -101,27 +178,40 @@ namespace Client.Forms
 
         #region manage
 
-        private void UsersListMouseDoubleClick(object sender, MouseEventArgs e) => UsersManageButton.PerformClick();
+        private void UsersListMouseDoubleClick(object sender, MouseEventArgs e) => UpdateUserButton.PerformClick();
         private void UsersManageButtonClick(object sender, EventArgs e)
         {
             if (!UsersList.SelectedIndex.Equals(ConstValues.NullIndex))
-                ChangeUserControl(new UserManageUserControl(UsersCollection[UsersList.SelectedIndex], this, settings.ConnectionString));
+                ChangeUserControl(new UserManageUserControl(UsersCollection[UsersList.SelectedIndex], this, Settings.ConnectionString));
         }
 
-        private void InsertUserButtonClick(object sender, EventArgs e) 
-            => ChangeUserControl(new UserManageUserControl(new UserModel() { ID = Guid.Empty }, this, settings.ConnectionString));
+        private void InsertUserButtonClick(object sender, EventArgs e)
+            => ChangeUserControl(new UserManageUserControl(new UserModel() { ID = Guid.Empty }, this, Settings.ConnectionString));
 
         #endregion manage
 
         #endregion users
 
+        #region view buttons
+
         private void ClientsButtonClick(object sender, EventArgs e)
-            => ChangeUserControl(new ClientsManageUserControl(this, settings.ConnectionString));
+            => ChangeUserControl(new ClientsManageUserControl(this, Settings.ConnectionString));
+
+        private void RequestButtonClick(object sender, EventArgs e)
+            => ChangeUserControl(new RequestUserControl(this, Settings.ConnectionString));
 
         private void RequestTypeButtonClick(object sender, EventArgs e)
         {
             GenericModelUserControl<RequestTypeModel, RequestTypeData> generic = new GenericModelUserControl<RequestTypeModel, RequestTypeData>
-                (this, settings.ConnectionString, SQLEnums.GetTableName(SQLEnums.TableNames.Типы_заявок));
+                (
+                this, Settings.ConnectionString,
+                SQLEnums.GetTableName(SQLEnums.TableNames.Типы_заявок),
+                new bool[]
+                {
+                    currentUser.CheckPermission(DataPermissions.RequestTypeInsert, currentPermissions),
+                    currentUser.CheckPermission(DataPermissions.RequestTypeUpdate, currentPermissions),
+                    currentUser.CheckPermission(DataPermissions.RequestTypeDelete, currentPermissions)
+                });
 
             ChangeUserControl(generic);
         }
@@ -129,26 +219,55 @@ namespace Client.Forms
         private void ServicesButtonClick(object sender, EventArgs e)
         {
             GenericModelUserControl<ServiceModel, ServiceData> generic = new GenericModelUserControl<ServiceModel, ServiceData>
-                (this, settings.ConnectionString, SQLEnums.GetTableName(SQLEnums.TableNames.Услуги));
+                (this, Settings.ConnectionString, SQLEnums.GetTableName(SQLEnums.TableNames.Услуги),
+                new bool[]
+                {
+                    currentUser.CheckPermission(DataPermissions.ServiceInsert, currentPermissions),
+                    currentUser.CheckPermission(DataPermissions.ServiceUpdate, currentPermissions),
+                    currentUser.CheckPermission(DataPermissions.ServiceDelete, currentPermissions)
+                });
 
             ChangeUserControl(generic);
         }
 
-        private void MenuStateButtonClick(object sender, EventArgs e)
+        private void OpenSettingsView_Click(object sender, EventArgs e) => ChangeUserControl(new SettingsUserControl(this, Settings));
+
+        #endregion view buttons
+
+        #region border menu
+        private void CloseApplicationButtonClick(object sender, EventArgs e) => Application.Exit();
+
+        private void ChangeAccountButtonClick(object sender, EventArgs e)
         {
-            if (menuStateButton.Text.Equals("Свернуть меню ◀"))
+            ApplicationExitReady = false;
+            Close();
+        }
+
+        private void MenuStateButtonClick(object sender, EventArgs e) => ChangeCollumnStylesAndMenuButton();
+
+        private void ChangeCollumnStylesAndMenuButton()
+        {
+            if (MenuStateButton.Text.Equals("Свернуть меню"))
             {
-                menuStateButton.Text = "▶ ▶ ▶";
-                MainTable.ColumnStyles[0].Width -= 350;
-                //GetAnim(MainTable.ColumnStyles[0].Width, MainTable.ColumnStyles[0].Width - 400);
+                MenuStateButton.Text = string.Empty;
+                MenuStateButton.Image = GetSmallIconFromBitmap(Resources.maximize);
+                SetButtonsText(false);
+                UsersList.Enabled = false;
+                MainTable.ColumnStyles[0].Width -= 275;
             }
             else
             {
-                menuStateButton.Text = "Свернуть меню ◀";
-                MainTable.ColumnStyles[0].Width += 350;
-                //GetAnim(MainTable.ColumnStyles[0].Width, MainTable.ColumnStyles[0].Width + 400);
+                MenuStateButton.Text = "Свернуть меню";
+                MenuStateButton.Image = GetSmallIconFromBitmap(Resources.minimize);
+                SetButtonsText(true);
+                UsersList.Enabled = true;
+                MainTable.ColumnStyles[0].Width += 275;
             }
         }
+
+        #endregion border menu
+
+        #region obsolete
 
         //[Obsolete("Тормозит систему, используйте WPF")]
         //private void GetAnim(float start, float end)
@@ -174,5 +293,7 @@ namespace Client.Forms
 
         //    animationTimer.Start();
         //}
+
+        #endregion obsolete
     }
 }

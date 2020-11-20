@@ -101,6 +101,7 @@
             this.AuthorizeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AuthorizeButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.AuthorizeButton.Enabled = false;
+            this.AuthorizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AuthorizeButton.Location = new System.Drawing.Point(0, 54);
             this.AuthorizeButton.Name = "AuthorizeButton";
             this.AuthorizeButton.Size = new System.Drawing.Size(268, 23);

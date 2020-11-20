@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Client.UserControls
+namespace Client
 {
     public static class DictionaryExtension
     {

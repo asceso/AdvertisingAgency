@@ -36,6 +36,7 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -51,6 +52,7 @@
     <Compile Include="Methods\GenericMethods.cs" />
     <Compile Include="Methods\MessageBoxImplementation.cs" />
     <Compile Include="Models\ConstValues.cs" />
+    <Compile Include="Models\DataPermissions.cs" />
     <Compile Include="Models\IClosableUI.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Methods\SettingsMethod.cs" />

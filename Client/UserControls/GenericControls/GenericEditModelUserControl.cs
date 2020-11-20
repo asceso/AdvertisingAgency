@@ -33,6 +33,7 @@ namespace Client.UserControls.GenericControls
             this.parrentView = parrentView;
             inputModel = model;
             ConnectionString = connectionString;
+            closeView.Dock = (DockStyle)parrentView.Settings.CloseViewButtonPosition;
             MaximumSize = new Size(Size.Width, Screen.PrimaryScreen.Bounds.Height);
             data = (DataType)Activator.CreateInstance(typeof(DataType));
             data.connection.ConnectionString = connectionString;
@@ -165,7 +166,7 @@ namespace Client.UserControls.GenericControls
             else
                 data.UpdateDataWithSqlGeneratedQuery(mappedModel);
             parrentView.UpdateDataList();
-            closeViewButton.PerformClick();
+            closeView.PerformClick();
         }
     }
 }
