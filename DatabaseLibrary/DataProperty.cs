@@ -16,10 +16,18 @@ namespace DatabaseLibrary
         public int CompareTo(object obj)
         {
             if (nameof(obj).Equals(nameof(InsertIndex)))
+            {
                 return InsertIndex.CompareTo(obj);
+            }
+
             if (nameof(obj).Equals(nameof(UpdateIndex)))
+            {
                 return UpdateIndex.CompareTo(obj);
-            else return 0;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

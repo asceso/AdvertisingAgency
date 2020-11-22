@@ -10,15 +10,19 @@ namespace Infrastructure.Methods
 {
     public static class SettingsMethods
     {
-        public static SettingsModel ReadConfig(string Path)
+        public static readonly string JsonPath = Environment.CurrentDirectory + "\\AppSettings.json";
+        public static SettingsModel ReadConfig()
         {
             string buffer = string.Empty;
-            using (StreamReader reader = new StreamReader(Path))
+            using (StreamReader reader = new StreamReader(JsonPath))
             {
                 buffer = reader.ReadToEnd();
             }
             if (buffer.Equals(string.Empty))
+            {
                 return new SettingsModel();
+            }
+
             SettingsModel settings = JsonConvert.DeserializeObject<SettingsModel>(buffer);
             return settings;
         }
@@ -26,7 +30,7 @@ namespace Infrastructure.Methods
         public static void SetConfig(SettingsModel settings)
         {
             string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-            using StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + "\\AppSettings.json");
+            using StreamWriter writer = new StreamWriter(JsonPath);
             writer.Write(json);
         }
 
@@ -55,13 +59,17 @@ namespace Infrastructure.Methods
                         }
                     }
                     else
+                    {
                         Application.Exit();
+                    }
                 }
             }
             finally
             {
                 if (connection.State.Equals(ConnectionState.Open))
+                {
                     connection.Close();
+                }
             }
         }
     }

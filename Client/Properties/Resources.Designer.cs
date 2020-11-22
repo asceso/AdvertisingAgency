@@ -118,6 +118,16 @@ namespace Client.Properties {
         }
         
         /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Новый пользователь.
         /// </summary>
         internal static string InsertUserButtonText {
@@ -161,6 +171,25 @@ namespace Client.Properties {
         internal static string NullString {
             get {
                 return ResourceManager.GetString("NullString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap position {
+            get {
+                object obj = ResourceManager.GetObject("position", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Должности.
+        /// </summary>
+        internal static string PositionsButtonText {
+            get {
+                return ResourceManager.GetString("PositionsButtonText", resourceCulture);
             }
         }
         

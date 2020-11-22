@@ -30,9 +30,15 @@ namespace Client.Forms
         private void ChangePasswordClick(object sender, System.EventArgs e)
         {
             if (!CheckOldPassword(user.Password, textBox0.Text))
+            {
                 return;
+            }
+
             if (!CheckNewPasswordConfirm())
+            {
                 return;
+            }
+
             using UserData data = new UserData(connectionString);
             UserModel newModel = user;
             newModel.Password = textBox2.Text;

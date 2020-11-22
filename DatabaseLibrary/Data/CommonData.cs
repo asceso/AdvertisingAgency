@@ -37,7 +37,10 @@ namespace DatabaseLibrary.Data
         {
             List<DataType> result = new List<DataType>();
             while (reader.Read())
+            {
                 result.Add(MapModel(reader));
+            }
+
             reader.Close();
             return result;
         }
@@ -47,7 +50,7 @@ namespace DatabaseLibrary.Data
             connection.Open();
             OleDbCommand command = connection.CreateCommand();
             command.CommandText = CreateSqlQuery(SQLEnums.QueryTypes.SELECT, TableName);
-            var result = GetCollectionFromReader(command.ExecuteReader());
+            List<DataType> result = GetCollectionFromReader(command.ExecuteReader());
             connection.Close();
             return result;
         }
@@ -60,7 +63,7 @@ namespace DatabaseLibrary.Data
             command.Parameters.AddWithValue("@ID", ID);
             OleDbDataReader reader = command.ExecuteReader();
             reader.Read();
-            var result = MapModel(reader);
+            DataType result = MapModel(reader);
             reader.Close();
             connection.Close();
             return result;
@@ -78,7 +81,7 @@ namespace DatabaseLibrary.Data
             OleDbCommand command = connection.CreateCommand();
             command.CommandText = CreateSqlQuery(SQLEnums.QueryTypes.DELETE, TableName);
             command.Parameters.AddWithValue("@ID", ID);
-            var result = command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
             connection.Close();
             return result;
         }
@@ -86,7 +89,7 @@ namespace DatabaseLibrary.Data
         public virtual int InsertData(DataType model, string procedureName)
         {
             connection.Open();
-            var parameters = model.GetType().GetProperties()
+            Dictionary<string, object> parameters = model.GetType().GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .OrderBy(o => o.CustomAttributes?
                 .FirstOrDefault(a => a.AttributeType.Equals(typeof(DataProperty)))
@@ -94,7 +97,7 @@ namespace DatabaseLibrary.Data
                 .ToDictionary(m => m.Name, m => m.GetValue(model));
 
             OleDbCommand command = CreateStoreProcedureCommand(procedureName, parameters);
-            var result = command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
             connection.Close();
             return result;
         }
@@ -102,7 +105,7 @@ namespace DatabaseLibrary.Data
         public virtual int InsertDataWithSqlGeneratedQuery(DataType model)
         {
             connection.Open();
-            var parameters = model.GetType().GetProperties()
+            Dictionary<string, object> parameters = model.GetType().GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .OrderBy(o => o.CustomAttributes?
                 .FirstOrDefault(a => a.AttributeType.Equals(typeof(DataProperty)))
@@ -121,7 +124,7 @@ namespace DatabaseLibrary.Data
             query += ");";
 
             command.CommandText = query;
-            var result = command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
             connection.Close();
             return result;
         }
@@ -129,7 +132,7 @@ namespace DatabaseLibrary.Data
         public virtual int UpdateData(DataType model, string procedureName)
         {
             connection.Open();
-            var parameters = model.GetType().GetProperties()
+            Dictionary<string, object> parameters = model.GetType().GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .OrderBy(o => o.CustomAttributes?
                 .FirstOrDefault(a => a.AttributeType.Equals(typeof(DataProperty)))
@@ -137,7 +140,7 @@ namespace DatabaseLibrary.Data
                 .ToDictionary(m => m.Name, m => m.GetValue(model));
 
             OleDbCommand command = CreateStoreProcedureCommand(procedureName, parameters);
-            var result = command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
             connection.Close();
             return result;
         }
@@ -145,7 +148,7 @@ namespace DatabaseLibrary.Data
         public virtual int UpdateDataWithSqlGeneratedQuery(DataType model)
         {
             connection.Open();
-            var parameters = model.GetType().GetProperties()
+            Dictionary<string, object> parameters = model.GetType().GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .OrderBy(o => o.CustomAttributes?
                 .FirstOrDefault(a => a.AttributeType.Equals(typeof(DataProperty)))
@@ -154,11 +157,11 @@ namespace DatabaseLibrary.Data
 
             OleDbCommand command = CreateSqlCommandWithParameters(parameters);
 
-            var headers = model.GetType().GetProperties()
+            IEnumerable<System.Reflection.PropertyInfo> headers = model.GetType().GetProperties()
                                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                                 .Where(p => !p.PropertyType.Equals(typeof(Guid)));
 
-            var props = headers
+            List<System.Reflection.CustomAttributeData> props = headers
                 .Select(p => p.CustomAttributes
                 .FirstOrDefault(c => c.AttributeType.Equals(typeof(DescriptionAttribute)))).ToList();
 
@@ -168,14 +171,17 @@ namespace DatabaseLibrary.Data
             foreach (OleDbParameter item in command.Parameters)
             {
                 if (item.ParameterName.Equals("@ID"))
+                {
                     continue;
+                }
+
                 SQLQuery.Append($"[{TableName}].[{props[propCounter++].ConstructorArguments[0].Value}] = {item.ParameterName}, ");
             }
             string query = SQLQuery.ToString().Remove(SQLQuery.ToString().LastIndexOf(','));
             query += $" WHERE [{TableName}].[Код] = @ID;";
 
             command.CommandText = query;
-            var result = command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
             connection.Close();
             return result;
         }
@@ -192,7 +198,10 @@ namespace DatabaseLibrary.Data
         {
             List<DataType> result = new List<DataType>();
             while (await reader.ReadAsync())
+            {
                 result.Add(MapModel(reader));
+            }
+
             reader.Close();
             return result;
         }
@@ -203,7 +212,7 @@ namespace DatabaseLibrary.Data
             OleDbCommand command = connection.CreateCommand();
             command.CommandText = CreateSqlQuery(SQLEnums.QueryTypes.SELECT, TableName);
             DbDataReader asyncReader = await command.ExecuteReaderAsync();
-            var result = await GetCollectionFromReaderAsync(asyncReader);
+            List<DataType> result = await GetCollectionFromReaderAsync(asyncReader);
             connection.Close();
             return result;
         }
@@ -216,7 +225,7 @@ namespace DatabaseLibrary.Data
             command.Parameters.AddWithValue("@ID", ID);
             DbDataReader asyncReader = await command.ExecuteReaderAsync();
             await asyncReader.ReadAsync();
-            var result = MapModel(asyncReader);
+            DataType result = MapModel(asyncReader);
             asyncReader.Close();
             connection.Close();
             return result;
@@ -232,7 +241,7 @@ namespace DatabaseLibrary.Data
             OleDbCommand command = connection.CreateCommand();
             command.CommandText = CreateSqlQuery(SQLEnums.QueryTypes.DELETE, TableName);
             command.Parameters.AddWithValue("@ID", ID);
-            var result = await command.ExecuteNonQueryAsync();
+            int result = await command.ExecuteNonQueryAsync();
             connection.Close();
             return result;
         }
@@ -240,7 +249,7 @@ namespace DatabaseLibrary.Data
         public virtual async Task<int> InsertDataAsync(DataType model, string procedureName)
         {
             await connection.OpenAsync();
-            var parameters = model.GetType().GetProperties()
+            Dictionary<string, object> parameters = model.GetType().GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .OrderBy(o => o.CustomAttributes?
                 .FirstOrDefault(a => a.AttributeType.Equals(typeof(DataProperty)))
@@ -248,7 +257,7 @@ namespace DatabaseLibrary.Data
                 .ToDictionary(m => m.Name, m => m.GetValue(model));
 
             OleDbCommand command = CreateStoreProcedureCommand(procedureName, parameters);
-            var result = await command.ExecuteNonQueryAsync();
+            int result = await command.ExecuteNonQueryAsync();
             connection.Close();
             return result;
         }
@@ -256,7 +265,7 @@ namespace DatabaseLibrary.Data
         public virtual async Task<int> UpdateDataAsync(DataType model, string procedureName)
         {
             await connection.OpenAsync();
-            var parameters = model.GetType().GetProperties()
+            Dictionary<string, object> parameters = model.GetType().GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .OrderBy(o => o.CustomAttributes?
                 .FirstOrDefault(a => a.AttributeType.Equals(typeof(DataProperty)))
@@ -264,7 +273,7 @@ namespace DatabaseLibrary.Data
                 .ToDictionary(m => m.Name, m => m.GetValue(model));
 
             OleDbCommand command = CreateStoreProcedureCommand(procedureName, parameters);
-            var result = await command.ExecuteNonQueryAsync();
+            int result = await command.ExecuteNonQueryAsync();
             connection.Close();
             return result;
         }

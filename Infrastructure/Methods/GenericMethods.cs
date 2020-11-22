@@ -6,7 +6,7 @@ namespace Infrastructure.Methods
     {
         public static IEnumerable<SomeType> ConvertFromListToIEnumerable(List<SomeType> input)
         {
-            foreach (var item in input)
+            foreach (SomeType item in input)
             {
                 yield return item;
             }

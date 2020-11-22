@@ -2,6 +2,8 @@
 {
     public static class DataPermissions
     {
+        public const string RolesManagment = nameof(RolesManagment);
+
         #region clients
         public const string ClientGet = nameof(ClientGet);
         public const string ClientInsert = nameof(ClientInsert);
@@ -36,5 +38,12 @@
         public const string RequestTypeUpdate = nameof(RequestTypeUpdate);
         public const string RequestTypeDelete = nameof(RequestTypeDelete);
         #endregion request types
+
+        #region positions
+        public const string PositionGet = nameof(PositionGet);
+        public const string PositionInsert = nameof(PositionInsert);
+        public const string PositionUpdate = nameof(PositionUpdate);
+        public const string PositionDelete = nameof(PositionDelete);
+        #endregion positions
     }
 }

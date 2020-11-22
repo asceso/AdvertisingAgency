@@ -15,7 +15,8 @@ namespace Client.UserControls
     public partial class UserManageUserControl : UserControl, IClosableUI
     {
         private readonly Dictionary<string, bool> modelHasValue;
-        enum ModelProps { FirstName, MiddleName, LastName, Position }
+
+        private enum ModelProps { FirstName, MiddleName, LastName, Position }
         private readonly MainForm parentForm;
 
         private readonly UserModel user;
@@ -49,15 +50,20 @@ namespace Client.UserControls
                     deleteButton
                 };
                 foreach (Control control in elemPanel.Controls)
+                {
                     newControlls.Add(control);
+                }
+
                 elemPanel.Controls.Clear();
                 elemPanel.Controls.AddRange(newControlls.ToArray());
                 elemPanel.Size = new Size(elemPanel.Width, elemPanel.Height + deleteButton.Height);
             }
 
             modelHasValue = new Dictionary<string, bool>();
-            foreach (var item in Enum.GetNames(typeof(ModelProps)))
+            foreach (string item in Enum.GetNames(typeof(ModelProps)))
+            {
                 modelHasValue.Add(item, false);
+            }
 
             fNameTextBox.TextChanged += (s, e)
                 => modelHasValue.DictionaryWithButtonEnableManagement(fNameTextBox, nameof(ModelProps.FirstName), AcceptChangesButton);
@@ -72,7 +78,10 @@ namespace Client.UserControls
         private async void DeleteButtonClick(object sender, EventArgs e)
         {
             using (UserData data = new UserData(ConnectionString))
+            {
                 await data.DeleteDataByGuidAsync(user.ID);
+            }
+
             parentForm.UpdateUsersList();
             Dispose();
         }
@@ -80,11 +89,15 @@ namespace Client.UserControls
         private void UserManageUserControlLoad(object sender, EventArgs e)
         {
             using (PositionData data = new PositionData(ConnectionString))
+            {
                 positions = data.GetDataCollection().Where(p => !p.Name.Equals("Директор")).ToList();
+            }
 
             positionsComboBox.Items.Clear();
             foreach (PositionModel position in positions)
+            {
                 positionsComboBox.Items.Add(position.Name);
+            }
 
             fNameTextBox.Text = user.FirstName;
             mNameTextBox.Text = user.MiddleName;
@@ -92,15 +105,22 @@ namespace Client.UserControls
             contactNumberTextBox.Text = user.ContactNumber;
 
             if (!user.ID.Equals(Guid.Empty))
+            {
                 positionsComboBox.SelectedItem = positions.FirstOrDefault(p => p.ID.Equals(user.Position.ID)).Name;
+            }
         }
 
         private async void AcceptChangesButtonClick(object sender, EventArgs e)
         {
             if (!user.ID.Equals(Guid.Empty))
+            {
                 await UpdateMethod();
+            }
             else
+            {
                 await InsertMethod();
+            }
+
             return;
         }
 
@@ -143,16 +163,17 @@ namespace Client.UserControls
         private RoleModel GetRoleByPosition(PositionModel position)
         {
             using RoleData roleData = new RoleData(ConnectionString);
-            var roles = roleData.GetDataCollection();
-            if (position.Name.Equals("Менеджер") ||
-                position.Name.Equals("Оператор"))
-                return roles.Find(r => r.Name.Equals("Registrator"));
-            if (position.Name.Equals("Инженер") ||
-                position.Name.Equals("Дизайнер") ||
-                position.Name.Equals("Техник") ||
-                position.Name.Equals("Программист"))
-                return roles.Find(r => r.Name.Equals("Operator"));
-            return roles.Find(r => r.Name.Equals("nullRole"));
+            List<RoleModel> roles = roleData.GetDataCollection();
+
+            foreach (KeyValuePair<Guid, List<Guid>> pair in parentForm.Settings.RolePositionsDictionary)
+            {
+                Guid finded = pair.Value.FirstOrDefault(p => p.Equals(position.ID));
+                if (finded != null)
+                {
+                    return roles.FirstOrDefault(r => r.ID.Equals(pair.Key));
+                }
+            }
+            return roles.FirstOrDefault(r => r.Name.Equals("nullRole"));
         }
 
         public void CloseViewClick(object sender, EventArgs e)

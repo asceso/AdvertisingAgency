@@ -19,19 +19,17 @@ namespace Client.UserControls.GenericControls
         where ModelType : DataModel, new()
     {
         #region ctor
-        internal SettingsModel Settings;
+        internal readonly MainForm parentForm;
         private readonly DataType data;
 
         #region props
-
-        public string ConnectionString { get; set; }
         public string TableName { get; set; }
 
         public ObservableCollection<ModelType> Models { get; set; }
 
         #endregion props
 
-        public GenericModelUserControl(MainForm parentForm, string connectionString, string tableName, bool[] permissionStates)
+        public GenericModelUserControl(MainForm parentForm, string tableName, bool[] permissionStates)
         {
             InitializeComponent();
 
@@ -39,14 +37,13 @@ namespace Client.UserControls.GenericControls
             updateButton.Visible = permissionStates[1];
             deleteButton.Visible = permissionStates[2];
 
-            ConnectionString = connectionString;
             TableName = tableName;
-            Settings = parentForm.Settings;
+            this.parentForm = parentForm;
             Size = parentForm.CurrentControlSize;
             closeView.Dock = (DockStyle)parentForm.Settings.CloseViewButtonPosition;
             Models = new ObservableCollection<ModelType>();
             data = (DataType)Activator.CreateInstance(typeof(DataType));
-            data.connection.ConnectionString = connectionString;
+            data.connection.ConnectionString = parentForm.Settings.ConnectionString;
             data.TableName = tableName;
             Models.CollectionChanged += ModelsCollectionChanged;
 
@@ -56,15 +53,15 @@ namespace Client.UserControls.GenericControls
         private void SetUserControlInterface()
         {
             headerLabel.Text = TableName;
-            var headers = typeof(ModelType).GetProperties()
+            IEnumerable<System.Reflection.PropertyInfo> headers = typeof(ModelType).GetProperties()
                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                 .Where(p => !p.PropertyType.Equals(typeof(Guid)));
 
-            var headersName = headers.Select(x => x.CustomAttributes
+            IEnumerable<object> headersName = headers.Select(x => x.CustomAttributes
                 .FirstOrDefault(c => c.AttributeType.Equals(typeof(DescriptionAttribute)))
                 .ConstructorArguments[ConstValues.Zero].Value);
 
-            foreach (var item in headersName)
+            foreach (object item in headersName)
             {
                 ColumnHeader column = new ColumnHeader
                 {
@@ -89,18 +86,22 @@ namespace Client.UserControls.GenericControls
 
                         for (int i = 0; i < collumnValues.Length; i++)
                         {
-                            var headers = data.GetType().GetProperties()
+                            IEnumerable<System.Reflection.PropertyInfo> headers = data.GetType().GetProperties()
                                 .Where(p => p.GetCustomAttributesData().Any(a => a.AttributeType.Equals(typeof(DataProperty))))
                                 .Where(p => !p.PropertyType.Equals(typeof(Guid)));
 
-                            var prop = headers
+                            System.Reflection.PropertyInfo prop = headers
                                 .FirstOrDefault(p => p.CustomAttributes
                                 .FirstOrDefault(c => c.AttributeType.Equals(typeof(DescriptionAttribute)))
                                 .ConstructorArguments[ConstValues.Zero].Value.Equals(SourceList.Columns[i].Text));
 
                             object propValue = prop.GetValue(data);
-
-                            collumnValues[i] = propValue is DataModel ? (propValue as DataModel).Name : propValue.ToString();
+                            if (propValue is bool boolProp)
+                                collumnValues[i] = boolProp ? "Да" : "Нет";
+                            if (propValue is double doubleProp)
+                                collumnValues[i] = doubleProp.ToString();
+                            if (propValue is string boolString)
+                                collumnValues[i] = boolString;
                         }
 
                         SourceList.Items.Add(new ListViewItem(collumnValues));
@@ -131,9 +132,13 @@ namespace Client.UserControls.GenericControls
             retrieved.ForEach(x => Models.Add(x));
 
             if (!selected.Equals(ConstValues.NullIndex) && !SourceList.Items.Count.Equals(ConstValues.Zero))
+            {
                 SourceList.Items[selected].Selected = true;
+            }
             else
+            {
                 SetUpdateDeleteButtonsEnabled(0b_00);
+            }
         }
 
         #endregion update list
@@ -144,8 +149,7 @@ namespace Client.UserControls.GenericControls
         private void InsertButtonClick(object sender, EventArgs e)
         {
             GenericEditModelUserControl<ModelType, DataType> view = new GenericEditModelUserControl<ModelType, DataType>(
-                this, new ModelType() { ID = Guid.Empty },
-                ConnectionString);
+                this, new ModelType() { ID = Guid.Empty });
 
             ActivateEditView(view);
         }
@@ -155,8 +159,7 @@ namespace Client.UserControls.GenericControls
         private void UpdateButtonClick(object sender, EventArgs e)
         {
             GenericEditModelUserControl<ModelType, DataType> view = new GenericEditModelUserControl<ModelType, DataType>(
-                this, Models[SourceList.SelectedIndices[ConstValues.Zero]],
-                ConnectionString);
+                this, Models[SourceList.SelectedIndices[ConstValues.Zero]]);
 
             ActivateEditView(view);
         }
@@ -169,23 +172,32 @@ namespace Client.UserControls.GenericControls
             if (SourceList.SelectedItems.Count <= 1)
             {
                 if (!MessageBoxImplementation.AskMessageBox("Удалить запись?"))
+                {
                     return;
+                }
+
                 Models.RemoveAt(SourceList.SelectedIndices[ConstValues.Zero]);
             }
             else
             {
                 if (!MessageBoxImplementation.AskMessageBox($"Будет удалено {SourceList.SelectedItems.Count} записей, продолжить?"))
+                {
                     return;
+                }
 
                 for (int i = SourceList.SelectedIndices.Count - 1; i >= ConstValues.Zero; i--)
+                {
                     Models.RemoveAt(SourceList.SelectedIndices[i]);
+                }
             }
             UpdateDataList();
         }
         private void SourceListKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode.Equals(Keys.Delete))
+            {
                 deleteButton.PerformClick();
+            }
         }
         #endregion delete
 
@@ -209,14 +221,18 @@ namespace Client.UserControls.GenericControls
             foreach (Control item in Controls)
             {
                 if (!item.Equals(view))
+                {
                     item.Enabled = false;
+                }
             }
         }
 
         public void ActivateFormControls()
         {
             foreach (Control item in Controls)
+            {
                 item.Enabled = true;
+            }
         }
 
         #endregion activate controls

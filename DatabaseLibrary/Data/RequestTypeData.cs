@@ -16,7 +16,9 @@ namespace DatabaseLibrary.Data
             {
                 ID = reader.GetGuid(0),
                 Name = reader.GetValue(1).ToString(),
-                Description = reader.GetValue(2).ToString()
+                Description = reader.GetValue(2).ToString(),
+                ShortName = reader.GetValue(3).ToString(),
+                RequireOtherWorks = reader.GetBoolean(4),
             };
         }
     }

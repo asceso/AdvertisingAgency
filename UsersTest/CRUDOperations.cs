@@ -15,7 +15,7 @@ namespace UsersTest
     {
         private readonly SettingsModel settings;
 
-        public CRUDOperations() => settings = SettingsMethods.ReadConfig(Environment.CurrentDirectory + "\\AppSettings.json");
+        public CRUDOperations() => settings = SettingsMethods.ReadConfig();
 
         [TestMethod("Base CRUD operation sync methods")]
         public void CheckCRUD()
@@ -43,7 +43,7 @@ namespace UsersTest
             }
 
             using RoleData roleData = new RoleData(settings.ConnectionString);
-            var dbRoles = roleData.GetDataCollection();
+            List<RoleModel> dbRoles = roleData.GetDataCollection();
             RoleModel temp = roleData.GetDataByGuid(dbRoles.Find(r => r.Name.Equals("nullRole")).ID);
 
             data.InsertData(
@@ -59,7 +59,7 @@ namespace UsersTest
                 },
                 nameof(SQLEnums.StoredProcedureNames.СотрудникиДобавить));
 
-            var models = data.GetDataCollection();
+            List<UserModel> models = data.GetDataCollection();
 
             UserModel someModel = data.GetDataByGuid(tempGuid);
             data.UpdateData(someModel, nameof(SQLEnums.StoredProcedureNames.СотрудникиИзменить));
@@ -112,7 +112,7 @@ namespace UsersTest
                     },
                     nameof(SQLEnums.StoredProcedureNames.СотрудникиДобавить));
 
-                var models = await data.GetDataCollectionAsync();
+                List<UserModel> models = await data.GetDataCollectionAsync();
 
                 UserModel someModel = await data.GetDataByGuidAsync(tempGuid);
                 await data.UpdateDataAsync(someModel, nameof(SQLEnums.StoredProcedureNames.СотрудникиИзменить));
@@ -120,7 +120,9 @@ namespace UsersTest
                 await data.DeleteDataByGuidAsync(tempGuid);
 
                 using (PositionData positionData = new PositionData(settings.ConnectionString))
+                {
                     await positionData.DeleteDataByGuidAsync(positionGuid);
+                }
 
                 models = data.GetDataCollectionAsync().Result;
             });

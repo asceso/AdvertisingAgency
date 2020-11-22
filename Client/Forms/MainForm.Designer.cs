@@ -34,6 +34,7 @@
             this.MainMenu = new System.Windows.Forms.Panel();
             this.SystemButtons = new System.Windows.Forms.Panel();
             this.SettingsButton = new System.Windows.Forms.Button();
+            this.PositionsButton = new System.Windows.Forms.Button();
             this.ServicesButton = new System.Windows.Forms.Button();
             this.RequestTypeButton = new System.Windows.Forms.Button();
             this.RequestButton = new System.Windows.Forms.Button();
@@ -102,17 +103,18 @@
             this.MainMenu.Size = new System.Drawing.Size(367, 487);
             this.MainMenu.TabIndex = 0;
             // 
-            // systemButtons
+            // SystemButtons
             // 
             this.SystemButtons.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SystemButtons.Controls.Add(this.SettingsButton);
+            this.SystemButtons.Controls.Add(this.PositionsButton);
             this.SystemButtons.Controls.Add(this.ServicesButton);
             this.SystemButtons.Controls.Add(this.RequestTypeButton);
             this.SystemButtons.Controls.Add(this.RequestButton);
             this.SystemButtons.Controls.Add(this.ClientsButton);
             this.SystemButtons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SystemButtons.Location = new System.Drawing.Point(0, 294);
-            this.SystemButtons.Name = "systemButtons";
+            this.SystemButtons.Name = "SystemButtons";
             this.SystemButtons.Size = new System.Drawing.Size(367, 193);
             this.SystemButtons.TabIndex = 8;
             // 
@@ -124,13 +126,29 @@
             this.SettingsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.SettingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
             this.SettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SettingsButton.Location = new System.Drawing.Point(0, 120);
+            this.SettingsButton.Location = new System.Drawing.Point(0, 150);
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.Size = new System.Drawing.Size(363, 30);
             this.SettingsButton.TabIndex = 5;
             this.SettingsButton.Text = "Настройки";
             this.SettingsButton.UseVisualStyleBackColor = true;
             this.SettingsButton.Click += new System.EventHandler(this.OpenSettingsView_Click);
+            // 
+            // PositionsButton
+            // 
+            this.PositionsButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.PositionsButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.PositionsButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.PositionsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.PositionsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            this.PositionsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PositionsButton.Location = new System.Drawing.Point(0, 120);
+            this.PositionsButton.Name = "PositionsButton";
+            this.PositionsButton.Size = new System.Drawing.Size(363, 30);
+            this.PositionsButton.TabIndex = 6;
+            this.PositionsButton.Text = "Должности";
+            this.PositionsButton.UseVisualStyleBackColor = true;
+            this.PositionsButton.Click += new System.EventHandler(this.PositionsButtonClick);
             // 
             // ServicesButton
             // 
@@ -408,6 +426,7 @@
         private System.Windows.Forms.Button ChangeAccountButton;
         private System.Windows.Forms.TableLayoutPanel ApplicationButtonsPanel;
         private System.Windows.Forms.Button CloseApplicationButton;
+        private System.Windows.Forms.Button PositionsButton;
     }
 }
 

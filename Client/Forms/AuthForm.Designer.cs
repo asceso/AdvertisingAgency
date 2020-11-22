@@ -56,6 +56,7 @@
             this.LoginBox.Name = "LoginBox";
             this.LoginBox.Size = new System.Drawing.Size(179, 20);
             this.LoginBox.TabIndex = 1;
+            this.LoginBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.BoxesKeyPress);
             // 
             // label1
             // 
@@ -85,6 +86,7 @@
             this.PasswordBox.Size = new System.Drawing.Size(179, 20);
             this.PasswordBox.TabIndex = 1;
             this.PasswordBox.UseSystemPasswordChar = true;
+            this.PasswordBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.BoxesKeyPress);
             // 
             // label2
             // 
@@ -101,6 +103,9 @@
             this.AuthorizeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AuthorizeButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.AuthorizeButton.Enabled = false;
+            this.AuthorizeButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.AuthorizeButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.AuthorizeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
             this.AuthorizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AuthorizeButton.Location = new System.Drawing.Point(0, 54);
             this.AuthorizeButton.Name = "AuthorizeButton";

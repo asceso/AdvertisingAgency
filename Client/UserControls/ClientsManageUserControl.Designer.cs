@@ -78,17 +78,17 @@
             // ClientMiddleName
             // 
             ClientMiddleName.Text = "Фамилия";
-            ClientMiddleName.Width = 80;
+            ClientMiddleName.Width = 93;
             // 
             // ClientFirstName
             // 
             ClientFirstName.Text = "Имя";
-            ClientFirstName.Width = 80;
+            ClientFirstName.Width = 113;
             // 
             // ClientLastName
             // 
             ClientLastName.Text = "Отчество";
-            ClientLastName.Width = 80;
+            ClientLastName.Width = 110;
             // 
             // ClientContactNumber
             // 

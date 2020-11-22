@@ -6,9 +6,6 @@ namespace DatabaseLibrary
     {
         public string Description { get; set; }
 
-        public OtherProperty(string Description)
-        {
-            this.Description = Description;
-        }
+        public OtherProperty(string Description) => this.Description = Description;
     }
 }

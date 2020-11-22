@@ -25,7 +25,10 @@ namespace DatabaseLibrary.Data
                 OrdersCount = reader.GetInt32(5)
             };
             if (!reader.GetValue(6).Equals(DBNull.Value))
+            {
                 model.AddtionalInfo = AddditionaClientlInfoes.GetDataByGuid(reader.GetGuid(6));
+            }
+
             return model;
         }
     }

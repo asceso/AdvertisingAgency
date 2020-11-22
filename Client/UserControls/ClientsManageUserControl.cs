@@ -27,17 +27,14 @@ namespace Client.UserControls
         private string currentValue;
         private readonly MainForm parentForm;
 
-        public string ConnectionString { get; set; }
-
         #endregion fields and props
 
         #region ctor
 
-        public ClientsManageUserControl(MainForm parentForm, string connectionString)
+        public ClientsManageUserControl(MainForm parentForm)
         {
             InitializeComponent();
             this.parentForm = parentForm;
-            ConnectionString = connectionString;
             Size = parentForm.CurrentControlSize;
             leadColorLabel.BackColor = ColdClientColor;
             clientColorLabel.BackColor = HotClientColor;
@@ -70,11 +67,11 @@ namespace Client.UserControls
         }
         private void UpdateArchiveList(int selected = ConstValues.NullIndex)
         {
-            using ArchiveData data = new ArchiveData(ConnectionString);
+            using ArchiveData data = new ArchiveData(parentForm.Settings.ConnectionString);
             archiveCollection = data.GetDataCollection();
 
             ArchiveList.Items.Clear();
-            foreach (var record in archiveCollection)
+            foreach (ArchiveModel record in archiveCollection)
             {
                 List<string> archiveRow = new List<string>
                 {
@@ -90,22 +87,28 @@ namespace Client.UserControls
                 ArchiveList.Items.Add(sourceItem);
             }
             if (!selected.Equals(ConstValues.NullIndex) && !ArchiveList.Items.Count.Equals(ConstValues.Zero))
+            {
                 ArchiveList.Items[selected].Selected = true;
+            }
         }
         private void UpdateClientsList(int selected = ConstValues.NullIndex)
         {
-            using SQLExecuter sql = new SQLExecuter(ConnectionString);
+            using SQLExecuter sql = new SQLExecuter(parentForm.Settings.ConnectionString);
             sql.ExecuteStoreProcedureWithoutParameters(nameof(SQLEnums.StoredProcedureNames.ОбнулитьПустыеДопИнфоКлиентов));
             sql.ExecuteStoreProcedureWithoutParameters(nameof(SQLEnums.StoredProcedureNames.УдалитьПустыеДопИнфо));
 
-            using ClientData data = new ClientData(ConnectionString);
+            using ClientData data = new ClientData(parentForm.Settings.ConnectionString);
             if (showArchived.Checked)
+            {
                 clientCollection = data.GetDataCollection();
+            }
             else
+            {
                 clientCollection = data.GetDataCollection().Where(x => !archiveCollection.Any(a => a.Client.ID.Equals(x.ID))).ToList();
+            }
 
             ClientsList.Items.Clear();
-            foreach (var client in clientCollection)
+            foreach (ClientModel client in clientCollection)
             {
                 List<string> clientRow = new List<string>
                 {
@@ -120,22 +123,33 @@ namespace Client.UserControls
                 };
                 ListViewItem sourceItem = new ListViewItem(clientRow.ToArray());
                 if (archiveCollection.Any(x => x.Client.ID.Equals(client.ID)))
+                {
                     sourceItem.BackColor = ArchiveReasonColor;
+                }
                 else
+                {
                     sourceItem.BackColor = client.AddtionalInfo == null ? ColdClientColor : HotClientColor;
+                }
+
                 ClientsList.Items.Add(sourceItem);
             }
             if (!selected.Equals(ConstValues.NullIndex) &&
                 !ClientsList.Items.Count.Equals(ConstValues.Zero) &&
                 selected < ClientsList.Items.Count)
+            {
                 ClientsList.Items[selected].Selected = true;
+            }
         }
         private void ShowArchivedCheckedEvent(object sender, EventArgs e)
         {
             if (ClientsList.SelectedIndices.Count.Equals(ConstValues.Zero))
+            {
                 UpdateClientsList();
+            }
             else
+            {
                 UpdateClientsList(ClientsList.SelectedIndices[ConstValues.Zero]);
+            }
         }
 
         #endregion ctor
@@ -145,18 +159,25 @@ namespace Client.UserControls
         private void ClientsListMouseDoubleClick(object sender, MouseEventArgs e)
         {
             ListViewItem item = ClientsList.GetItemAt(e.X, e.Y);
-            var subItem = item.GetSubItemAt(e.X, e.Y);
+            ListViewItem.ListViewSubItem subItem = item.GetSubItemAt(e.X, e.Y);
             editElemPanel.Visible = true;
             editElemPanel.Location = new Point(0, subItem.Bounds.Y + 1 + ClientsList.TopItem.Bounds.Top);
             currentValue = subItem.Text;
             currentTarget = ClientsList.Columns[item.SubItems.IndexOf(subItem)].Text;
             editValueTextBox.Mask = string.Empty;
             if (currentTarget.Equals("Контактный номер") || currentTarget.Equals("Доп. контактный номер"))
+            {
                 editValueTextBox.Mask = "0 ( 000 ) 000 - 00 - 00";
+            }
+
             if (currentTarget.Equals("Всего заказов"))
+            {
                 editValueTextBox.Mask = "000";
+            }
+
             editValueTextBox.Text = currentValue;
             editLabel.Text = currentTarget;
+            editValueTextBox.SelectAll();
             editValueTextBox.Focus();
         }
 
@@ -167,18 +188,23 @@ namespace Client.UserControls
             ClientModel oldModel = clientCollection[ClientsList.SelectedIndices[ConstValues.Zero]];
             ClientModel client = (ClientModel)oldModel.Clone();
             SwitchCurrentTargetToModelItem(ref client, editValueTextBox.Text);
-            using AddditionalClientInfoData addditionalData = new AddditionalClientInfoData(ConnectionString);
+            using AddditionalClientInfoData addditionalData = new AddditionalClientInfoData(parentForm.Settings.ConnectionString);
             if (oldModel.AddtionalInfo != null)
+            {
                 addditionalData.UpdateData(
                     client.AddtionalInfo,
                     nameof(SQLEnums.StoredProcedureNames.ДопинфоИзменить)
                     );
+            }
             else
+            {
                 addditionalData.InsertData(
                     client.AddtionalInfo ?? new AddditionalClientInfoModel(true),
                     nameof(SQLEnums.StoredProcedureNames.ДопинфоДобавить)
                     );
-            using ClientData clientData = new ClientData(ConnectionString);
+            }
+
+            using ClientData clientData = new ClientData(parentForm.Settings.ConnectionString);
             clientData.UpdateData(client, nameof(SQLEnums.StoredProcedureNames.КлиентыИзменить));
             editElemPanel.Visible = false;
             UpdateClientsList(ClientsList.SelectedIndices[ConstValues.Zero]);
@@ -194,21 +220,36 @@ namespace Client.UserControls
                 case "Контактный номер": client.ContactNumber = value; return;
                 case "Доп. контактный номер":
                     if (client.AddtionalInfo != null)
+                    {
                         client.AddtionalInfo.AdditionalContactNumber = value;
+                    }
                     else
+                    {
                         CreateAdditionalAndAtempToModel(ref client, new string[] { nameof(client.AddtionalInfo.AdditionalContactNumber), value });
+                    }
+
                     return;
                 case "Адрес":
                     if (client.AddtionalInfo != null)
+                    {
                         client.AddtionalInfo.Address = value;
+                    }
                     else
+                    {
                         CreateAdditionalAndAtempToModel(ref client, new string[] { nameof(client.AddtionalInfo.Address), value });
+                    }
+
                     return;
                 case "Предпочтения":
                     if (client.AddtionalInfo != null)
+                    {
                         client.AddtionalInfo.Preferences = value;
+                    }
                     else
+                    {
                         CreateAdditionalAndAtempToModel(ref client, new string[] { nameof(client.AddtionalInfo.Preferences), value });
+                    }
+
                     return;
             }
         }
@@ -256,18 +297,21 @@ namespace Client.UserControls
         private void ClientsListSelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (ListViewItem item in ClientsList.Items)
+            {
                 if (item.Selected)
                 {
                     deleteClientButton.Enabled = true;
                     return;
                 }
+            }
+
             deleteClientButton.Enabled = false;
         }
         private void DeleteClientButtonClick(object sender, EventArgs e)
         {
             ConfirmClientDeletingForm deletingForm = new ConfirmClientDeletingForm(
                 clientCollection[ClientsList.SelectedIndices[ConstValues.Zero]],
-                ConnectionString
+                parentForm.Settings.ConnectionString
                 );
             deletingForm.ShowDialog();
             UpdateArchiveList();
@@ -280,7 +324,7 @@ namespace Client.UserControls
 
         private void InsertClientButtonClick(object sender, EventArgs e)
         {
-            using ClientData data = new ClientData(ConnectionString);
+            using ClientData data = new ClientData(parentForm.Settings.ConnectionString);
             data.InsertData(
                 new ClientModel()
                 {

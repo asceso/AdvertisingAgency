@@ -22,8 +22,6 @@ namespace Client.Forms
 
         private const string AuthorizeSuccess = "Авторизация успешна";
         private const string AuthorizeFailed = "Пароль введен неверно, проверьте правильность ввода и повторите попытку";
-
-        private readonly string SettingsPath = Environment.CurrentDirectory + "\\AppSettings.json";
         #endregion
 
         #region fields
@@ -35,7 +33,7 @@ namespace Client.Forms
         {
             InitializeComponent();
             Icon = Resources.system;
-            settings = SettingsMethods.ReadConfig(SettingsPath);
+            settings = SettingsMethods.ReadConfig();
 
             LoginBox.TextChanged += TextBoxesValueChanged;
             PasswordBox.TextChanged += TextBoxesValueChanged;
@@ -54,7 +52,10 @@ namespace Client.Forms
         private void AuthorizeButtonClick(object sender, EventArgs e)
         {
             using (UserData data = new UserData(settings.ConnectionString))
+            {
                 users = data.GetDataCollection();
+            }
+
             string checkingResult = CheckLogin(LoginBox.Text);
             if (!checkingResult.Equals(string.Empty))
             {
@@ -63,47 +64,74 @@ namespace Client.Forms
             }
             checkingResult = CheckLoginPasswordPair(LoginBox.Text, PasswordBox.Text);
             if (!checkingResult.Equals(AuthorizeSuccess))
+            {
                 MessageBoxImplementation.ShowErrorMessage(checkingResult);
+            }
             //Run program
             MainForm main = new MainForm(settings, users.FirstOrDefault(u => u.Login.Equals(LoginBox.Text)));
             Hide();
             main.ShowDialog();
             if (main.ApplicationExitReady)
+            {
                 Application.Exit();
+            }
             else
+            {
                 Show();
+            }
         }
 
         private string CheckLogin(string login)
         {
             if (string.IsNullOrEmpty(login))
+            {
                 return NullOrEmptyLoginError;
+            }
+
             if (login.Length < 3)
+            {
                 return LoginLengthError;
+            }
+
             if (!users.Any(u => u.Login.Equals(login)))
+            {
                 return LoginNotFoundError;
+            }
+
             return string.Empty;
         }
 
         private string CheckLoginPasswordPair(string login, string password)
         {
             if (string.IsNullOrEmpty(password))
+            {
                 return NullOrEmptyPasswordError;
+            }
+
             if (password.Length < 3)
+            {
                 return PasswordLengthError;
+            }
+
             if (users.Any(u => u.Login.Equals(login) && u.Password.Equals(password)))
+            {
                 return AuthorizeSuccess;
+            }
             else
+            {
                 return AuthorizeFailed;
+            }
         }
 
         private void TextBoxesValueChanged(object sender, EventArgs e)
             => AuthorizeButton.Enabled = !string.IsNullOrEmpty(LoginBox.Text) && !string.IsNullOrEmpty(PasswordBox.Text);
 
-        private void PasswordBoxKeyPress(object sender, KeyPressEventArgs e)
+        private void BoxesKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar.Equals(Keys.Enter))
+            if (e.KeyChar.Equals((char)Keys.Enter))
+            {
                 AuthorizeButton.PerformClick();
+            }
         }
     }
 }

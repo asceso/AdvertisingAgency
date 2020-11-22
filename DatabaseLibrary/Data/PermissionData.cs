@@ -31,7 +31,7 @@ namespace DatabaseLibrary.Data
             OleDbCommand command = CreateStoreProcedureCommand(
                 nameof(SQLEnums.StoredProcedureNames.СписокРазрешенийДляРоли),
                 new Dictionary<string, object>() { { "@ID", RoleID } });
-            var result = GetCollectionFromReader(command.ExecuteReader());
+            List<PermissionModel> result = GetCollectionFromReader(command.ExecuteReader());
             connection.Close();
             return result;
         }
@@ -43,7 +43,7 @@ namespace DatabaseLibrary.Data
                 nameof(SQLEnums.StoredProcedureNames.СписокРазрешенийДляРоли),
                 new Dictionary<string, object>() { { "@ID", RoleID } });
             DbDataReader asyncReader = await command.ExecuteReaderAsync();
-            var result = await GetCollectionFromReaderAsync(asyncReader);
+            List<PermissionModel> result = await GetCollectionFromReaderAsync(asyncReader);
             connection.Close();
             return result;
         }

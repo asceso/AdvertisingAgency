@@ -15,7 +15,10 @@ namespace DatabaseLibrary
         public void Dispose()
         {
             if (!connection.State.Equals(ConnectionState.Closed))
+            {
                 connection.Close();
+            }
+
             GC.Collect();
         }
 
@@ -71,11 +74,16 @@ namespace DatabaseLibrary
             OleDbCommand command = connection.CreateCommand();
             command.CommandText = $"[{ProcedureName}]";
             command.CommandType = CommandType.StoredProcedure;
-            foreach (var parameter in parameters)
+            foreach (KeyValuePair<string, object> parameter in parameters)
             {
                 if (parameter.Value is DataModel)
+                {
                     if ((parameter.Value as DataModel).IsIgnorable)
+                    {
                         continue;
+                    }
+                }
+
                 command.Parameters.AddWithValue(
                     $"@{parameter.Key}",
                     parameter.Value is DataModel ?
@@ -89,11 +97,16 @@ namespace DatabaseLibrary
         {
             OleDbCommand command = connection.CreateCommand();
             command.CommandType = CommandType.Text;
-            foreach (var parameter in parameters)
+            foreach (KeyValuePair<string, object> parameter in parameters)
             {
                 if (parameter.Value is DataModel)
+                {
                     if ((parameter.Value as DataModel).IsIgnorable)
+                    {
                         continue;
+                    }
+                }
+
                 command.Parameters.AddWithValue(
                     $"@{parameter.Key}",
                     parameter.Value is DataModel ?

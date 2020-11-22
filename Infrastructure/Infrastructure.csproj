@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\ApplicationEnums.cs" />
     <Compile Include="Enums\SQLEnums.cs" />
+    <Compile Include="Methods\EnumsMethods.cs" />
     <Compile Include="Methods\GenericMethods.cs" />
     <Compile Include="Methods\MessageBoxImplementation.cs" />
     <Compile Include="Models\ConstValues.cs" />

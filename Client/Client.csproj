@@ -115,6 +115,12 @@
     <Compile Include="UserControls\RequestUserControl.Designer.cs">
       <DependentUpon>RequestUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\RoleManagmentUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RoleManagmentUserControl.Designer.cs">
+      <DependentUpon>RoleManagmentUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\SettingsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -156,6 +162,9 @@
     <EmbeddedResource Include="UserControls\RequestUserControl.resx">
       <DependentUpon>RequestUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoleManagmentUserControl.resx">
+      <DependentUpon>RoleManagmentUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SettingsUserControl.resx">
       <DependentUpon>SettingsUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -188,7 +197,9 @@
       <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\position.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\system.ico" />
   </ItemGroup>
@@ -224,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\clients.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Infrastructure.Models
@@ -19,8 +20,11 @@ namespace Infrastructure.Models
         public bool HideBorderMenu { get; set; }
         public bool RestoreBorderMenu { get; set; }
         public bool ShowAdditionalInfo { get; set; }
+        public bool ShowOnlyOwnRequests { get; set; }
         public int CloseViewButtonPosition { get; set; }
         public int FullScreenAtStart { get; set; }
+        public string FileFolderPath { get; set; }
+        public Dictionary<Guid, List<Guid>> RolePositionsDictionary { get; set; }
 
         #endregion application
 

@@ -14,7 +14,7 @@ namespace DatabaseLibrary.Models
 
         #region override
 
-        [DataProperty(0, 8)]
+        [DataProperty(0, 9)]
         public override Guid ID { get => base.ID; set => base.ID = value; }
 
         [DataProperty(1, 0)]
@@ -46,10 +46,14 @@ namespace DatabaseLibrary.Models
         public UserModel User { get; set; }
 
         [DataProperty(7, 6)]
+        [Description("Сотрудник")]
+        public UserModel TargetUser { get; set; }
+
+        [DataProperty(8, 7)]
         [Description("Клиент")]
         public ClientModel Client { get; set; }
 
-        [DataProperty(8, 7)]
+        [DataProperty(9, 8)]
         [Description("Статус заявки")]
         public int Status { get; set; }
 

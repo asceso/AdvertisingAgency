@@ -58,8 +58,10 @@
     <Compile Include="Data\RequestData.cs" />
     <Compile Include="Data\RequestTypeData.cs" />
     <Compile Include="Data\RoleData.cs" />
+    <Compile Include="Data\RolePermissionData.cs" />
     <Compile Include="Data\ServiceData.cs" />
     <Compile Include="Data\UserData.cs" />
+    <Compile Include="ItemType.cs" />
     <Compile Include="Models\AddditionalClientInfoModel.cs" />
     <Compile Include="Models\ArchiveModel.cs" />
     <Compile Include="Models\ClientModel.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Models\RequestModel.cs" />
     <Compile Include="Models\RequestTypeModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\RolePermissionModel.cs" />
     <Compile Include="Models\ServiceModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="OtherProperty.cs" />
