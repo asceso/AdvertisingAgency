@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Infrastructure.Models;
@@ -43,7 +44,7 @@ namespace Infrastructure.Methods
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("Не удается найти файл"))
+                if (ex.Message.Contains("Could not find file") || ex.Message.Contains("Не удается найти файл"))
                 {
                     if (MessageBoxImplementation.AskMessageBox("Файл БД не найден. Перезаписать путь к файлу?"))
                     {
@@ -60,7 +61,32 @@ namespace Infrastructure.Methods
                     }
                     else
                     {
-                        Application.Exit();
+                        Environment.Exit(-1);
+                    }
+                    if (MessageBoxImplementation.AskMessageBox("База данных требует пароля?"))
+                    {
+                        InputBox input = new InputBox();
+                        input.ShowDialog();
+                        settings.Password = input.InputValue;
+                        SetConfig(settings);
+                    }
+                }
+                if (ex.Message.Contains("Microsoft.ACE.OLEDB.12.0"))
+                {
+                    if (MessageBoxImplementation.AskMessageBox(
+                        "Для работы приложения необходимо установить поставщика данных." +
+                        "\r\nУстановить сейчас?"))
+                    {
+                        string dbAccessPath = Environment.CurrentDirectory + "\\AccessDatabaseEngine";
+                        dbAccessPath += Environment.Is64BitOperatingSystem ? "_X64.exe" : ".exe";
+                        Process dbSetup = new Process();
+                        dbSetup.StartInfo.FileName = dbAccessPath;
+                        dbSetup.Start();
+                        dbSetup.WaitForExit();
+                    }
+                    else
+                    {
+                        Environment.Exit(-1);
                     }
                 }
             }

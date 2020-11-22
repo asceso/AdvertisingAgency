@@ -44,7 +44,6 @@ namespace Client.Forms
             SetImages();
 
             ApplicationExitReady = true;
-            SettingsMethods.CheckDatabaseExist(settings);
 
             UpdateUsersList();
             SetButtonsEnabledByRole();

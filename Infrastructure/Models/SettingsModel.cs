@@ -9,9 +9,13 @@ namespace Infrastructure.Models
         #region connection
 
         [JsonIgnore]
-        public string ConnectionString => $"Provider={Provider} Data Source={DataSource}";
+        public string ConnectionString
+            => Password.Equals(string.Empty) ?
+            $"Provider={Provider} Data Source={DataSource}" :
+            $"Provider={Provider} Data Source={DataSource}; Jet OLEDB:Database Password={Password}";
         public string Provider { get; set; }
         public string DataSource { get; set; }
+        public string Password { get; set; }
 
         #endregion connection
 

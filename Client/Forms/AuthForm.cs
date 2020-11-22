@@ -38,6 +38,8 @@ namespace Client.Forms
             LoginBox.TextChanged += TextBoxesValueChanged;
             PasswordBox.TextChanged += TextBoxesValueChanged;
 
+            SettingsMethods.CheckDatabaseExist(settings);
+
 #if DEBUG
             LoginBox.TextChanged -= TextBoxesValueChanged;
             PasswordBox.TextChanged -= TextBoxesValueChanged;
